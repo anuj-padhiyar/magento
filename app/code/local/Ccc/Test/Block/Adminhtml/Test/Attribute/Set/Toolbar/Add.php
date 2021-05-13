@@ -11,7 +11,7 @@ class Ccc_Test_Block_Adminhtml_Test_Attribute_Set_Toolbar_Add extends Mage_Admin
     protected function _prepareLayout()
     {
         $this->setChild('save_button',
-            $this->getLayout()->createBlock('adm`inhtml/widget_button')
+            $this->getLayout()->createBlock('adminhtml/widget_button')
                 ->setData(array(
                     'label'     => Mage::helper('test')->__('Save test Attribute Set'),
                     'onclick'   => 'if (addSet.submit()) disableElements(\'save\');',
