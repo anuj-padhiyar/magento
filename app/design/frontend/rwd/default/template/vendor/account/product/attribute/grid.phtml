@@ -1,0 +1,27 @@
+<?php echo $this->getMessagesBlock()->toHtml(); ?>
+<?php $attributes = $this->_prepareCollection(); ?>
+
+<h1>Product Attribute Grid</h1>
+<a class="button" href="<?php echo $this->getUrl('*/*/edit'); ?>">Add Attribute</a>
+<table border="1" width="100%">
+    <tr>
+        <th>Attribute Lable</th>
+        <th>Required</th>
+        <th>Assigned</th>
+        <th colspan="2">Action</th>
+    </tr>
+        <?php if($attributes->count()): ?>
+            <?php foreach($attributes->getData() as $key=>$attribute): ?>
+                <?php $this->getGroupAttributes($attribute['attribute_id']); ?>
+                <tr>
+                    <td><?php echo $attribute['frontend_label']; ?></td>
+                    <td><?php echo $attribute['is_required']; ?></td>
+                    <td><?php echo $this->getGroupAttributes($attribute['attribute_id']); ?></td>
+                    <td><a href="<?php echo $this->getUrl('*/*/edit',['id'=>$attribute['attribute_id']]); ?>">Edit</a></td>
+                    <td><a href="<?php echo $this->getUrl('*/*/delete',['id'=>$attribute['attribute_id']]); ?>">Delete</a></td>
+                </tr>
+            <?php endforeach; ?>
+        <?php else: ?>
+            <td colspan="5">No Record Found</td>
+        <?php endif; ?>
+</table>

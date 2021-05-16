@@ -1,0 +1,199 @@
+<?php echo $this->getMessagesBlock()->toHtml(); ?>
+<?php $productAttribute = Mage::registry('product_attribute'); ?>
+<?php $groups = $this->getGroups(); ?>
+
+<h1><?php echo $this->getHeaderText(); ?></h1>
+<form action="<?php echo $this->getUrl('*/*/save',array('id'=>$this->getRequest()->getParam('id'))); ?>" method="POST">
+    <a class="button" href="<?php echo $this->getUrl('*/*/'); ?>">Back</a>
+    <button class="button" type="submit">Save</button>
+    <table cellspacing="0" class="form-list">
+        <tbody>
+            <?php if($groups): ?>
+                <tr>
+                    <td class="label"><label for="group">Group</label></td>
+                    <td class="value">
+                        <select id="group" name="group" title="Scope" class=" select">
+                            <option disabled selected>Select Group</option>
+                            <?php foreach($groups->getData() as $key=>$group): ?>
+                                <option value="<?php echo $group['attribute_group_id'];?>" <?php if($group['attribute_group_id'] == $this->getCurrentGroup()){echo "selected";} ?>><?php echo $group['attribute_group_name']; ?></option>
+                            <?php endforeach; ?>
+                        </select>
+                        <p class="note" id="note_is_global"><span>Declare attribute value saving scope</span></p>
+                    </td>
+                </tr>
+            <?php endif; ?>
+            <tr>
+                <td class="label"><label for="is_global">Scope</label></td>
+                <td class="value">
+                    <select id="is_global" name="is_global" title="Scope" class=" select">
+                        <option value="0" selected="selected">Store View</option>
+                        <option value="2" <?php if($this->getValue('is_global',$productAttribute) == '2'){echo "selected";} ?>>Website</option>
+                        <option value="1" <?php if($this->getValue('is_global',$productAttribute) == '1'){echo "selected";} ?>>Global</option>
+                    </select>
+                    <p class="note" id="note_is_global"><span>Declare attribute value saving scope</span></p>
+                </td>
+            </tr>
+            <tr>
+                <td class="label"><label for="frontend_input">Catalog Input Type for Store Owner</label></td>
+                <td class="value">
+                    <select id="frontend_input" onchange="changeInput();" name="frontend_input" title="Catalog Input Type for Store Owner" class=" select">
+                        <option value="text" selected="selected">Text Field</option>
+                        <option value="textarea" <?php if($this->getValue('frontend_input',$productAttribute) == 'textarea'){echo "selected";} ?>>Text Area</option>
+                        <option value="date" <?php if($this->getValue('frontend_input',$productAttribute) == 'date'){echo "selected";} ?>>Date</option>
+                        <option value="boolean" <?php if($this->getValue('frontend_input',$productAttribute) == 'boolean'){echo "selected";} ?>>Yes/No</option>
+                        <option value="multiselect" <?php if($this->getValue('frontend_input',$productAttribute) == 'multiselect'){echo "selected";} ?>>Multiple Select</option>
+                        <option value="select" <?php if($this->getValue('frontend_input',$productAttribute) == 'select'){echo "selected";} ?>>Dropdown</option>
+                        <option value="price" <?php if($this->getValue('frontend_input',$productAttribute) == 'price'){echo "selected";} ?>>Price</option>
+                        <option value="media_image" <?php if($this->getValue('frontend_input',$productAttribute) == 'media_image'){echo "selected";} ?>>Media Image</option>
+                    </select>
+                </td>
+            </tr>
+            <tr id="dText">
+                <td class="label"><label for="default_value_text">Default Value</label></td>
+                <td class="value">
+                    <input id="default_value_text" name="default_value_text" value="<?php echo $this->getValue('default_value',$productAttribute); ?>" title="Default Value" type="text" class=" input-text" />
+                </td>
+            </tr>
+            <tr id="dYesNo">
+                <td class="label"><label for="default_value_yesno">Default Value</label></td>
+                <td class="value">
+                    <select id="default_value_yesno" name="default_value_yesno" title="Default Value" class=" select">
+                        <option value="0" selected="selected">No</option>
+                        <option value="1" <?php if($this->getValue('default_value',$productAttribute) == '1'){echo "selected";} ?>>Yes</option>
+                    </select>
+                </td>
+            </tr>
+            <tr id="dDate">
+                <td class="label"><label for="default_value_date">Default Value</label></td>
+                <td class="value">
+                    <input name="default_value_date" id="default_value_date" value="<?php echo $this->getValue('default_value',$productAttribute); ?>" title="Default Value" type="text" class=" input-text" style="width:110px !important;" /> <img src="http://127.0.0.1/phpCode/magento/skin/adminhtml/default/default/images/grid-cal.gif" alt="" class="v-middle" id="default_value_date_trig" title="Select Date" style="" />
+                    <script type="text/javascript">
+                        //<![CDATA[
+                        Calendar.setup({
+                            inputField: "default_value_date",
+                            ifFormat: "%m/%e/%Y",
+                            showsTime: false,
+                            button: "default_value_date_trig",
+                            align: "Bl",
+                            singleClick: true
+                        });
+                        //]]>
+                    </script>
+                </td>
+            </tr>
+            <tr id="dTextarea">
+                <td class="label"><label for="default_value_textarea">Default Value</label></td>
+                <td class="value">
+                    <textarea id="default_value_textarea" name="default_value_textarea" title="Default Value" rows="2" cols="15" class=" textarea"><?php echo $this->getValue('default_value',$productAttribute); ?></textarea>
+                </td>
+            </tr>
+            <tr id="unique">
+                <td class="label"><label for="is_unique">Unique Value</label></td>
+                <td class="value">
+                    <select id="is_unique" name="is_unique" title="Unique Value (not shared with other products)" class=" select">
+                        <option value="0" selected="selected">No</option>
+                        <option value="1" <?php if($this->getValue('is_unique',$productAttribute) == '1'){echo "selected";} ?>>Yes</option>
+                    </select>
+                    <p class="note" id="note_is_unique"><span>Not shared with other products</span></p>
+                </td>
+            </tr>
+            <tr id="required">
+                <td class="label"><label for="is_required">Values Required</label></td>
+                <td class="value">
+                    <select id="is_required" name="is_required" title="Values Required" class=" select">
+                        <option value="0" selected="selected">No</option>
+                        <option value="1" <?php if($this->getValue('is_required',$productAttribute) == '1'){echo "selected";} ?>>Yes</option>
+                    </select>
+                </td>
+            </tr>
+            <tr id="frontend">
+                <td class="label"><label for="frontend_class">Input Validation for Store Owner</label></td>
+                <td class="value">
+                    <select id="frontend_class" name="frontend_class" title="Input Validation for Store Owner" class=" select">
+                        <option value="" selected="selected">None</option>
+                        <option value="validate-number" <?php if($this->getValue('frontend_class',$productAttribute) == 'validate-number'){echo "selected";} ?>>Decimal Number</option>
+                        <option value="validate-digits" <?php if($this->getValue('frontend_class',$productAttribute) == 'validate-digits'){echo "selected";} ?>>Integer Number</option>
+                        <option value="validate-email" <?php if($this->getValue('frontend_class',$productAttribute) == 'validate-email'){echo "selected";} ?>>Email</option>
+                        <option value="validate-url" <?php if($this->getValue('frontend_class',$productAttribute) == 'validate-url'){echo "selected";} ?>>URL</option>
+                        <option value="validate-alpha" <?php if($this->getValue('frontend_class',$productAttribute) == 'validate-alpha'){echo "selected";} ?>>Letters</option>
+                        <option value="validate-alphanum" <?php if($this->getValue('frontend_class',$productAttribute) == 'validate-alphanum'){echo "selected";} ?>>Letters (a-z, A-Z) or Numbers (0-9)</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td class="label"><label for="frontend_label">Admin</label></td>
+                <td>
+                    <input class="input-text required-option" type="text" name="frontend_label" value="<?php echo $this->getValue('frontend_label',$productAttribute);?>" ,$productAttributerequired/>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</form>
+
+<script>
+    var input = document.getElementById('frontend_input').value;
+    window.onload = function setDefault(){
+        document.getElementById('dYesNo').style.display = "none";
+        document.getElementById('dDate').style.display = "none";
+        document.getElementById('dTextarea').style.display = "none";
+    }
+    function changeInput(){
+        if(input == 'text'){
+            document.getElementById('unique').style.removeProperty("display");
+            document.getElementById('frontend').style.removeProperty("display");
+            document.getElementById('dText').style.removeProperty("display");
+            document.getElementById('dYesNo').style.display = "none";
+            document.getElementById('dDate').style.display = "none";
+            document.getElementById('dTextarea').style.display = "none";
+        }
+        if(input == 'textarea'){
+            document.getElementById('unique').style.removeProperty("display");
+            document.getElementById('frontend').style.removeProperty("display");
+            document.getElementById('dTextarea').style.removeProperty("display");
+            document.getElementById('dYesNo').style.display = "none";
+            document.getElementById('dDate').style.display = "none";
+            document.getElementById('dText').style.display = "none";
+        }
+        if(input == 'date'){
+            document.getElementById('unique').style.removeProperty("display");
+            document.getElementById('frontend').style.removeProperty("display");
+            document.getElementById('dDate').style.removeProperty("display");
+            document.getElementById('dYesNo').style.display = "none";
+            document.getElementById('dTextarea').style.display = "none";
+            document.getElementById('dText').style.display = "none";
+        }
+        if(input == 'boolean'){
+            document.getElementById('unique').style.removeProperty("display");
+            document.getElementById('frontend').style.removeProperty("display");
+            document.getElementById('dYesNo').style.removeProperty("display");
+            document.getElementById('dDate').style.display = "none";
+            document.getElementById('dTextarea').style.display = "none";
+            document.getElementById('dText').style.display = "none";
+        }
+        if(input == 'multiselect' || input=='select'){ 
+            document.getElementById('unique').style.removeProperty("display");
+            document.getElementById('frontend').style.removeProperty("display");
+            document.getElementById('dYesNo').style.display = "none";
+            document.getElementById('dDate').style.display = "none";
+            document.getElementById('dTextarea').style.display = "none";
+            document.getElementById('dText').style.display = "none";
+        }
+        if(input == 'price'){
+            document.getElementById('dText').style.removeProperty("display");
+            document.getElementById('unique').style.removeProperty("display");
+            document.getElementById('frontend').style.removeProperty("display");
+            document.getElementById('dDate').style.display = "none";
+            document.getElementById('dTextarea').style.display = "none";
+            document.getElementById('dYesNo').style.display = "none";
+        }
+        if(input == 'media_image'){
+            document.getElementById('dText').style.display = "none";
+            document.getElementById('dDate').style.display = "none";
+            document.getElementById('dTextarea').style.display = "none";
+            document.getElementById('dYesNo').style.display = "none";
+            document.getElementById('unique').style.display = "none";
+            document.getElementById('required').style.display = "none";
+            document.getElementById('frontend').style.display = "none";
+        }
+    }
+</script>

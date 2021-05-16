@@ -1,0 +1,40 @@
+<?php $groups = $this->getGroups(); ?>
+<?php foreach($groups as $key=>$value){ ?>
+        <a class='button tab' id="<?php echo $key; ?>" onclick="getTabContent(this)"; href="javascript:void(0)">
+        <?php echo $value['label']; ?>
+    </a><br><br>
+<?php } ?>
+
+<script>
+    var tabId;
+    var tabsData = <?php echo json_encode($groups); ?>;
+    getTabContent(null,<?php echo json_encode('group_'.$this->getDefaultGroup()); ?>);
+    function getTabContent(tab,defaultTab = ''){
+        if(defaultTab){
+            tabId = defaultTab;
+        }else{
+            tabId = tab.id;
+        }
+
+        if(document.getElementById('product_edit')){
+            jQuery('.tab').each(function(id,obj) {
+                var divDom = document.createElement('div');
+                divDom.id = obj.id+'_content';
+                jQuery(divDom).addClass('tabContent');
+
+                if(!document.getElementById(obj.id+'_content')){
+                    document.getElementById('product_edit').appendChild(divDom);
+                    document.getElementById(obj.id+'_content').innerHTML = tabsData[obj.id]['content'];
+                }
+            });
+
+            jQuery('.tabContent').hide();
+            document.getElementById(tabId+'_content').show();
+
+            jQuery('.tab').addClass('inactive');
+            jQuery("#"+tabId).addClass('active');
+            jQuery("#"+tabId).removeClass('inactive');
+
+        }
+    }
+</script>

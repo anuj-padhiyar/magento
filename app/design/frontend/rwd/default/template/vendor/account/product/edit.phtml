@@ -1,0 +1,9 @@
+<h1><?php echo $this->getHeaderText(); ?></h1>
+<center><div id="messageHtml" class="error"></div></center>
+<form method="post" action="<?php echo $this->getUrl('*/*/save',['id'=>$this->getRequest()->getParam('id')]); ?>">
+    <a class="button" href="<?php echo $this->getUrl('*/*/index'); ?>">Back</a>
+    <?php if(!$this->getRequest()->getParam('okay')):?>
+        <button type="submit" class="button">Save Product</button>
+    <?php endif; ?>
+    <div id="product_edit"></div>
+</form>
