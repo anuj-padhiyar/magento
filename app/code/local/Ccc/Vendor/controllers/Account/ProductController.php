@@ -2,6 +2,10 @@
 
 class Ccc_Vendor_Account_ProductController extends Mage_Core_Controller_Front_Action{
     public function indexAction(){
+        if (!Mage::getSingleton('vendor/session')->isLoggedIn()) {
+            $this->_redirect('*/account/login');
+            return;
+        }
         $this->loadLayout();
         $this->getLayout()->getBlock('head')->setTitle($this->__('My Account'));
         $this->renderLayout();
@@ -81,8 +85,8 @@ class Ccc_Vendor_Account_ProductController extends Mage_Core_Controller_Front_Ac
             $vendorId = Mage::getModel('vendor/session')->getId();
             $id = $this->getRequest()->getParam('id');
            
-            if(!is_numeric($data['weight']) || !is_numeric($data['price'])){
-                Mage::getSingleton('core/session')->addError("Weight And Price Should be Numerical.");
+            if(!is_numeric($data['weight']) || !is_numeric($data['price']) || $data['price']>0 || $data['weight']>0){
+                Mage::getSingleton('core/session')->addError("Weight And Price Should be Numerical And Valid.");
                 $this->_redirect('*/*/edit',array('_current'=>true));
                 return;
             }

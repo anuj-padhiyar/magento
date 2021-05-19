@@ -46,5 +46,9 @@ class Ccc_Vendor_Block_Account_Product_Attribute_Edit extends Mage_Core_Block_Te
         }
         return null;
     }
+
+    public function getAddNewButtonHtml(){
+        return $this->getChildHtml('add_button');
+    }
 }
 ?>

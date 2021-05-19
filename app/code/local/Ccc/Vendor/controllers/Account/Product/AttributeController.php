@@ -4,8 +4,9 @@ class Ccc_Vendor_Account_Product_AttributeController extends Mage_Core_Controlle
     protected $_entityTypeId;
     
     public function indexAction(){
-        if(!Mage::getModel('vendor/session')->getId()){  
+        if (!Mage::getSingleton('vendor/session')->isLoggedIn()) {
             $this->_redirect('*/account/login');
+            return;
         }
         $this->loadLayout();
         $this->renderLayout();
@@ -18,7 +19,7 @@ class Ccc_Vendor_Account_Product_AttributeController extends Mage_Core_Controlle
         if($id){
             $model->load($id);
             if (!$model->getId()) {
-                Mage::getSingleton('vendor/session')->addError(
+                Mage::getSingleton('core/session')->addError(
                     Mage::helper('vendor')->__('This attribute no longer exists'));
                 $this->_redirect('*/*/');
                 return;
@@ -72,7 +73,6 @@ class Ccc_Vendor_Account_Product_AttributeController extends Mage_Core_Controlle
                 }
                 $data['attribute_code'] = $model->getAttributeCode();
                 $data['is_user_defined'] = $model->getIsUserDefined();
-                $data['frontend_input'] = $model->getFrontendInput();
             }else{
                 $data['source_model'] = $helper->getAttributeSourceModelByInputType($data['frontend_input']);
                 $data['backend_model'] = $helper->getAttributeBackendModelByInputType($data['frontend_input']);
@@ -125,9 +125,8 @@ class Ccc_Vendor_Account_Product_AttributeController extends Mage_Core_Controlle
                 $groupModel->setAttributeId($model->getAttributeId());
                 $groupModel->setAttributeSetId(Mage::getModel('eav/entity_setup', 'core_setup')->getAttributeSetId('vendor_product', 'Default'));
                 $groupModel->save();
-                $session->addSuccess(
+                Mage::getSingleton('core/session')->addSuccess(
                     Mage::helper('vendor')->__('The vendor attribute has been saved.'));
-
                 Mage::app()->cleanCache(array(Mage_Core_Model_Translate::CACHE_TAG));
                 $session->setAttributeData(false);
                 $this->_redirect('*/*/', array());
@@ -173,17 +172,17 @@ class Ccc_Vendor_Account_Product_AttributeController extends Mage_Core_Controlle
             $model->load($id);
             try {
                 $model->delete();
-                Mage::getSingleton('vendor/session')->addSuccess(
+                Mage::getSingleton('core/session')->addSuccess(
                     Mage::helper('vendor')->__('The Product attribute has been deleted.'));
                 $this->_redirect('*/*/');
                 return;
             } catch (Exception $e) {
-                Mage::getSingleton('vendor/session')->addError($e->getMessage());
+                Mage::getSingleton('core/session')->addError($e->getMessage());
                 $this->_redirect('*/*/edit', array('id' => $this->getRequest()->getParam('id')));
                 return;
             }
         }
-        Mage::getSingleton('vendor/session')->addError(
+        Mage::getSingleton('core/session')->addError(
             Mage::helper('vendor')->__('Unable to find an attribute to delete.'));
         $this->_redirect('*/*/');
     }

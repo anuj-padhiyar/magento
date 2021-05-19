@@ -2,9 +2,11 @@
 
 class Ccc_Vendor_Account_Product_GroupController extends Mage_Core_Controller_Front_Action{
     public function indexAction(){ 
-        if(!Mage::getModel('vendor/session')->isLoggedIn()){
+        if (!Mage::getSingleton('vendor/session')->isLoggedIn()) {
             $this->_redirect('*/account/login');
+            return;
         }
+        
         $this->loadLayout();
         $this->renderLayout();
     }

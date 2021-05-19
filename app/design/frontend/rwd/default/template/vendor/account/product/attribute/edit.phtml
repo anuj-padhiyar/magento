@@ -1,5 +1,6 @@
 <?php echo $this->getMessagesBlock()->toHtml(); ?>
 <?php $productAttribute = Mage::registry('product_attribute'); ?>
+<?php //echo "<pre>"; print_r($productAttribute); die; ?>
 <?php $groups = $this->getGroups(); ?>
 
 <h1><?php echo $this->getHeaderText(); ?></h1>
@@ -8,6 +9,12 @@
     <button class="button" type="submit">Save</button>
     <table cellspacing="0" class="form-list">
         <tbody>
+            <tr>
+                <td class="label"><label for="frontend_label">Admin</label></td>
+                <td>
+                    <input class="input-text required-option" type="text" name="frontend_label" value="<?php echo $this->getValue('frontend_label',$productAttribute);?>" ,$productAttributerequired/>
+                </td>
+            </tr>
             <?php if($groups): ?>
                 <tr>
                     <td class="label"><label for="group">Group</label></td>
@@ -22,7 +29,7 @@
                     </td>
                 </tr>
             <?php endif; ?>
-            <tr>
+            <tr id="scope">
                 <td class="label"><label for="is_global">Scope</label></td>
                 <td class="value">
                     <select id="is_global" name="is_global" title="Scope" class=" select">
@@ -36,7 +43,7 @@
             <tr>
                 <td class="label"><label for="frontend_input">Catalog Input Type for Store Owner</label></td>
                 <td class="value">
-                    <select id="frontend_input" onchange="changeInput();" name="frontend_input" title="Catalog Input Type for Store Owner" class=" select">
+                    <select id="frontend_input"  name="frontend_input" title="Catalog Input Type for Store Owner" class=" select">
                         <option value="text" selected="selected">Text Field</option>
                         <option value="textarea" <?php if($this->getValue('frontend_input',$productAttribute) == 'textarea'){echo "selected";} ?>>Text Area</option>
                         <option value="date" <?php if($this->getValue('frontend_input',$productAttribute) == 'date'){echo "selected";} ?>>Date</option>
@@ -48,13 +55,13 @@
                     </select>
                 </td>
             </tr>
-            <tr id="dText">
+            <tr id="text" class="changable">
                 <td class="label"><label for="default_value_text">Default Value</label></td>
                 <td class="value">
                     <input id="default_value_text" name="default_value_text" value="<?php echo $this->getValue('default_value',$productAttribute); ?>" title="Default Value" type="text" class=" input-text" />
                 </td>
             </tr>
-            <tr id="dYesNo">
+            <tr id="boolean" class="changable">
                 <td class="label"><label for="default_value_yesno">Default Value</label></td>
                 <td class="value">
                     <select id="default_value_yesno" name="default_value_yesno" title="Default Value" class=" select">
@@ -63,7 +70,7 @@
                     </select>
                 </td>
             </tr>
-            <tr id="dDate">
+            <tr id="date" class="changable">
                 <td class="label"><label for="default_value_date">Default Value</label></td>
                 <td class="value">
                     <input name="default_value_date" id="default_value_date" value="<?php echo $this->getValue('default_value',$productAttribute); ?>" title="Default Value" type="text" class=" input-text" style="width:110px !important;" /> <img src="http://127.0.0.1/phpCode/magento/skin/adminhtml/default/default/images/grid-cal.gif" alt="" class="v-middle" id="default_value_date_trig" title="Select Date" style="" />
@@ -81,7 +88,7 @@
                     </script>
                 </td>
             </tr>
-            <tr id="dTextarea">
+            <tr id="textarea" class="changable">
                 <td class="label"><label for="default_value_textarea">Default Value</label></td>
                 <td class="value">
                     <textarea id="default_value_textarea" name="default_value_textarea" title="Default Value" rows="2" cols="15" class=" textarea"><?php echo $this->getValue('default_value',$productAttribute); ?></textarea>
@@ -97,7 +104,7 @@
                     <p class="note" id="note_is_unique"><span>Not shared with other products</span></p>
                 </td>
             </tr>
-            <tr id="required">
+            <tr id="required" >
                 <td class="label"><label for="is_required">Values Required</label></td>
                 <td class="value">
                     <select id="is_required" name="is_required" title="Values Required" class=" select">
@@ -106,7 +113,7 @@
                     </select>
                 </td>
             </tr>
-            <tr id="frontend">
+            <tr id="frontend" class="changable">
                 <td class="label"><label for="frontend_class">Input Validation for Store Owner</label></td>
                 <td class="value">
                     <select id="frontend_class" name="frontend_class" title="Input Validation for Store Owner" class=" select">
@@ -120,80 +127,67 @@
                     </select>
                 </td>
             </tr>
-            <tr>
-                <td class="label"><label for="frontend_label">Admin</label></td>
-                <td>
-                    <input class="input-text required-option" type="text" name="frontend_label" value="<?php echo $this->getValue('frontend_label',$productAttribute);?>" ,$productAttributerequired/>
-                </td>
-            </tr>
         </tbody>
-    </table>
+    </table><br><br>
+    <div class="entity-edit" id="matage-options-panel">
+        <div class="entry-edit-head">
+            <h4 class="icon-head head-edit-form fieldset-legend"><?php echo Mage::helper('catalog')->__('Manage Options (values of your attribute)') ?></h4>
+        </div>
+        <div class="box">
+            <div class="hor-scroll">
+                <table class="dynamic-grid" cellspacing="0"  cellpadding="0">
+                    <tr id="attribute-options-table">
+                        <th><?php echo Mage::helper('catalog')->__('Name') ?></th>
+                        <th><?php echo Mage::helper('catalog')->__('Position') ?></th>
+                        <th class="nobr a-center"><?php echo Mage::helper('catalog')->__('Is Default') ?></th>
+                        <th><?php echo $this->getAddNewButtonHtml(); ?></th>
+                    </tr>
+                    <tr class="no-display template" id="row-template">
+                        <?php foreach ($this->getStores() as $_store): ?>
+                        <td><input name="option[value][{{id}}][<?php echo $_store->getId() ?>]" value="{{store<?php echo $_store->getId() ?>}}" class="input-text<?php if($_store->getId()==0): ?> required-option<?php endif; ?>" type="text" <?php if ($this->getReadOnly()):?> disabled="disabled"<?php endif;?>/></td>
+                        <?php endforeach; ?>
+                        <td class="a-center"><input class="input-text" type="text" name="option[order][{{id}}]" value="{{sort_order}}" <?php if ($this->getReadOnly()):?> disabled="disabled"<?php endif;?>/></td>
+                        <td><input class="input-radio" type="radio" name="default[]" value="{{id}}" <?php if ($this->getReadOnly()):?> disabled="disabled"<?php endif;?>/></td>
+                        <td class="a-left">
+                            <input type="hidden" class="delete-flag" name="option[delete][{{id}}]" value="" />
+                            <?php if (!$this->getReadOnly()):?>
+                                <?php echo $this->getDeleteButtonHtml() ?>
+                            <?php endif;?>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <input type="hidden" id="option-count-check" value="" />
+        </div>
+    </div>
 </form>
 
 <script>
-    var input = document.getElementById('frontend_input').value;
-    window.onload = function setDefault(){
-        document.getElementById('dYesNo').style.display = "none";
-        document.getElementById('dDate').style.display = "none";
-        document.getElementById('dTextarea').style.display = "none";
-    }
-    function changeInput(){
-        if(input == 'text'){
-            document.getElementById('unique').style.removeProperty("display");
-            document.getElementById('frontend').style.removeProperty("display");
-            document.getElementById('dText').style.removeProperty("display");
-            document.getElementById('dYesNo').style.display = "none";
-            document.getElementById('dDate').style.display = "none";
-            document.getElementById('dTextarea').style.display = "none";
-        }
-        if(input == 'textarea'){
-            document.getElementById('unique').style.removeProperty("display");
-            document.getElementById('frontend').style.removeProperty("display");
-            document.getElementById('dTextarea').style.removeProperty("display");
-            document.getElementById('dYesNo').style.display = "none";
-            document.getElementById('dDate').style.display = "none";
-            document.getElementById('dText').style.display = "none";
-        }
-        if(input == 'date'){
-            document.getElementById('unique').style.removeProperty("display");
-            document.getElementById('frontend').style.removeProperty("display");
-            document.getElementById('dDate').style.removeProperty("display");
-            document.getElementById('dYesNo').style.display = "none";
-            document.getElementById('dTextarea').style.display = "none";
-            document.getElementById('dText').style.display = "none";
-        }
-        if(input == 'boolean'){
-            document.getElementById('unique').style.removeProperty("display");
-            document.getElementById('frontend').style.removeProperty("display");
-            document.getElementById('dYesNo').style.removeProperty("display");
-            document.getElementById('dDate').style.display = "none";
-            document.getElementById('dTextarea').style.display = "none";
-            document.getElementById('dText').style.display = "none";
-        }
-        if(input == 'multiselect' || input=='select'){ 
-            document.getElementById('unique').style.removeProperty("display");
-            document.getElementById('frontend').style.removeProperty("display");
-            document.getElementById('dYesNo').style.display = "none";
-            document.getElementById('dDate').style.display = "none";
-            document.getElementById('dTextarea').style.display = "none";
-            document.getElementById('dText').style.display = "none";
-        }
-        if(input == 'price'){
-            document.getElementById('dText').style.removeProperty("display");
-            document.getElementById('unique').style.removeProperty("display");
-            document.getElementById('frontend').style.removeProperty("display");
-            document.getElementById('dDate').style.display = "none";
-            document.getElementById('dTextarea').style.display = "none";
-            document.getElementById('dYesNo').style.display = "none";
-        }
-        if(input == 'media_image'){
-            document.getElementById('dText').style.display = "none";
-            document.getElementById('dDate').style.display = "none";
-            document.getElementById('dTextarea').style.display = "none";
-            document.getElementById('dYesNo').style.display = "none";
-            document.getElementById('unique').style.display = "none";
-            document.getElementById('required').style.display = "none";
-            document.getElementById('frontend').style.display = "none";
+    jQuery(document).ready(function () {
+        jQuery('.changable').hide();
+        jQuery('#text').show();
+        jQuery('#frontend').show();
+        showData();
+    });
+    jQuery('#frontend_input').change(showData);
+    function showData() {
+        jQuery('.changable').hide();
+        jQuery('#required').show();
+        jQuery('#unique').show();  
+        jQuery('#scope').show();
+        value = '#'+jQuery('#frontend_input').val();
+        if(value == '#media_image'){
+            jQuery('#frontend').hide();
+            jQuery('#required').hide();
+            jQuery('#unique').hide();   
+        }else if(value == '#text'){
+            jQuery(value).show();
+            jQuery('#frontend').show();
+        }else if(value == '#price'){
+            jQuery('#text').show();
+            jQuery('#scope').hide();
+        }else{
+            jQuery(value).show();
         }
     }
 </script>
