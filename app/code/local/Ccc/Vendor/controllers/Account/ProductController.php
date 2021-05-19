@@ -75,6 +75,7 @@ class Ccc_Vendor_Account_ProductController extends Mage_Core_Controller_Front_Ac
 
     public function saveAction(){
         try{
+            
             if(!$this->getRequest()->isPost()){
                 Mage::getSingleton('core/session')->addSuccess("Opps Getting Error");
                 $this->_redirect('*/*/');
@@ -85,12 +86,12 @@ class Ccc_Vendor_Account_ProductController extends Mage_Core_Controller_Front_Ac
             $vendorId = Mage::getModel('vendor/session')->getId();
             $id = $this->getRequest()->getParam('id');
            
-            if(!is_numeric($data['weight']) || !is_numeric($data['price']) || $data['price']>0 || $data['weight']>0){
+            if(!is_numeric($data['weight']) || !is_numeric($data['price']) || $data['price']<0 || $data['weight']<0){
                 Mage::getSingleton('core/session')->addError("Weight And Price Should be Numerical And Valid.");
                 $this->_redirect('*/*/edit',array('_current'=>true));
                 return;
             }
-            $model = Mage::getSingleton('vendor/product');
+            //$model = Mage::getSingleton('vendor/product');
             if($id){
                 $model->load($id);
             }

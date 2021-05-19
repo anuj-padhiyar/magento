@@ -149,7 +149,6 @@ class Ccc_Vendor_Adminhtml_Vendor_AttributeController extends Mage_Adminhtml_Con
     {
         $data = $this->getRequest()->getPost();
         if ($data) {
-
             $session = Mage::getSingleton('vendor/session');
             $redirectBack = $this->getRequest()->getParam('back', false);
             $model = Mage::getModel('vendor/resource_eav_attribute');
@@ -249,7 +248,6 @@ class Ccc_Vendor_Adminhtml_Vendor_AttributeController extends Mage_Adminhtml_Con
                 $model->setAttributeSetId($this->getRequest()->getParam('set'));
                 $model->setAttributeGroupId($this->getRequest()->getParam('group'));
             }
-
             try {
                 $model->save();
                 $session->addSuccess(

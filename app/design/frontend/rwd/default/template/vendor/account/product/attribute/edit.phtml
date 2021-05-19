@@ -2,6 +2,10 @@
 <?php $productAttribute = Mage::registry('product_attribute'); ?>
 <?php //echo "<pre>"; print_r($productAttribute); die; ?>
 <?php $groups = $this->getGroups(); ?>
+<?php $options = $this->getOptions($productAttribute->getId()); ?>
+
+<?php ///echo "<pre>"; print_r($options); die; ?>
+
 
 <h1><?php echo $this->getHeaderText(); ?></h1>
 <form action="<?php echo $this->getUrl('*/*/save',array('id'=>$this->getRequest()->getParam('id'))); ?>" method="POST">
@@ -73,19 +77,7 @@
             <tr id="date" class="changable">
                 <td class="label"><label for="default_value_date">Default Value</label></td>
                 <td class="value">
-                    <input name="default_value_date" id="default_value_date" value="<?php echo $this->getValue('default_value',$productAttribute); ?>" title="Default Value" type="text" class=" input-text" style="width:110px !important;" /> <img src="http://127.0.0.1/phpCode/magento/skin/adminhtml/default/default/images/grid-cal.gif" alt="" class="v-middle" id="default_value_date_trig" title="Select Date" style="" />
-                    <script type="text/javascript">
-                        //<![CDATA[
-                        Calendar.setup({
-                            inputField: "default_value_date",
-                            ifFormat: "%m/%e/%Y",
-                            showsTime: false,
-                            button: "default_value_date_trig",
-                            align: "Bl",
-                            singleClick: true
-                        });
-                        //]]>
-                    </script>
+                    <input type="date" name="default_value_date" id="default_value_date" value="<?php echo $this->getValue('default_value',$productAttribute); ?>" title="Default Value" type="text" class=" input-text" style="width:110px !important;" /> <img src="http://127.0.0.1/phpCode/magento/skin/adminhtml/default/default/images/grid-cal.gif" alt="" class="v-middle" id="default_value_date_trig" title="Select Date" style="" />
                 </td>
             </tr>
             <tr id="textarea" class="changable">
@@ -129,39 +121,151 @@
             </tr>
         </tbody>
     </table><br><br>
-    <div class="entity-edit" id="matage-options-panel">
+    <div class="box changable" id="option"  >
         <div class="entry-edit-head">
             <h4 class="icon-head head-edit-form fieldset-legend"><?php echo Mage::helper('catalog')->__('Manage Options (values of your attribute)') ?></h4>
         </div>
-        <div class="box">
-            <div class="hor-scroll">
-                <table class="dynamic-grid" cellspacing="0"  cellpadding="0">
-                    <tr id="attribute-options-table">
-                        <th><?php echo Mage::helper('catalog')->__('Name') ?></th>
-                        <th><?php echo Mage::helper('catalog')->__('Position') ?></th>
-                        <th class="nobr a-center"><?php echo Mage::helper('catalog')->__('Is Default') ?></th>
-                        <th><?php echo $this->getAddNewButtonHtml(); ?></th>
-                    </tr>
+        <div class="hor-scroll">
+            <table class="dynamic-grid" cellspacing="0" cellpadding="0">
+                <tr id="attribute-options-table">
+                    <th style="width:22%"><b>Name</b></th>
+                    <th style="width:22%"><b>Default Store Value</b></th>
+                    <th style="width:22%"><b>Sort Order</b></th>
+                    <th><b>Is Default</b></th>
+                    <th>
+                        <button  id="add_new_option_button" title="Add Option" type="button" class="scalable add" onclick="" style=""><span><span><span>Add Option</span></span></span></button>
+                    </th>
                     <tr class="no-display template" id="row-template">
-                        <?php foreach ($this->getStores() as $_store): ?>
-                        <td><input name="option[value][{{id}}][<?php echo $_store->getId() ?>]" value="{{store<?php echo $_store->getId() ?>}}" class="input-text<?php if($_store->getId()==0): ?> required-option<?php endif; ?>" type="text" <?php if ($this->getReadOnly()):?> disabled="disabled"<?php endif;?>/></td>
-                        <?php endforeach; ?>
-                        <td class="a-center"><input class="input-text" type="text" name="option[order][{{id}}]" value="{{sort_order}}" <?php if ($this->getReadOnly()):?> disabled="disabled"<?php endif;?>/></td>
-                        <td><input class="input-radio" type="radio" name="default[]" value="{{id}}" <?php if ($this->getReadOnly()):?> disabled="disabled"<?php endif;?>/></td>
+                        <td><input name="option[value][{{id}}][0]" placeholder="Admin" value="{{store0}}" class=" required-option" type="text" /></td>
+                        <td><input name="option[value][{{id}}][1]" placeholder="Default Store View"  value="{{store1}}" class="" type="text" /></td>
+                        <td class="a-center"><input class="" type="text" name="option[order][{{id}}]" value="{{sort_order}}" placeholder="Position" /></td>
+                        <td><input class="input-radio" type="radio" name="default[]" value="{{id}}" /></td>
                         <td class="a-left">
                             <input type="hidden" class="delete-flag" name="option[delete][{{id}}]" value="" />
-                            <?php if (!$this->getReadOnly()):?>
-                                <?php echo $this->getDeleteButtonHtml() ?>
-                            <?php endif;?>
+                            <button  id="id_c800e40efe4de6e36e40b891ffb357e4" title="Delete" type="button" class="scalable delete delete-option" onclick="" style=""><span><span><span>Delete</span></span></span></button>
                         </td>
                     </tr>
-                </table>
-            </div>
-            <input type="hidden" id="option-count-check" value="" />
+                </tr>
+            </table>
         </div>
+        <input type="hidden" id="option-count-check" value="" />
     </div>
+</div>
 </form>
 
+
+
+<script type="text/javascript">
+//<![CDATA[
+var optionDefaultInputType = 'radio';
+
+// IE removes quotes from element.innerHTML whenever it thinks they're not needed, which breaks html.
+var templateText =
+        '<tr class="option-row">'+
+            '<td><input name="option[value][{{id}}][0]" placeholder="Admin" value="{{store0}}" style="width:95%" class="input-text required-option" type="text" /><\/td>'+
+            '<td><input name="option[value][{{id}}][1]" value="{{store1}}" style="width:95%" placeholder="Default Store View" class="input-text" type="text" /><\/td>'+
+            '<td><input class="input-text" type="text" name="option[order][{{id}}]" value="{{sort_order}}" style="width:95%"placeholder="Position"/><\/td>'+
+            '<td class="a-center"><input class="input-radio" type="{{intype}}" name="defaul][]" value="{{id}}" {{checked}} /><\/td>'+
+            '<td class="a-left" id="delete_button_container_{{id}}">'+
+                '<input type="hidden" class="delete-flag" name="option[delete][{{id}}]" value="" />'+
+                                    '<button  id="id_c800e40efe4de6e36e40b891ffb357e4" title="Delete" type="button" class="scalable delete delete-option" onclick="" style=""><span><span><span>Delete</span></span></span></button>'+
+                            '<\/td>'+
+        '<\/tr>';
+
+var attributeOption = {
+    table : $('attribute-options-table'),
+    templateSyntax : /(^|.|\r|\n)({{(\w+)}})/,
+    templateText : templateText,
+    itemCount : 0,
+    totalItems : 0,
+    isReadOnly: 0,
+    add : function(data) {
+        this.template = new Template(this.templateText, this.templateSyntax);
+        var isNewOption = false;
+        if(!data.id){
+            data = {};
+            data.id  = 'option_'+this.itemCount;
+            isNewOption = true;
+        }
+        if (!data.intype)
+            data.intype = optionDefaultInputType;
+        Element.insert(this.table, {after: this.template.evaluate(data)});
+        if (isNewOption && !this.isReadOnly) {
+            this.enableNewOptionDeleteButton(data.id);
+        }
+        this.bindRemoveButtons();
+        this.itemCount++;
+        this.totalItems++;
+        this.updateItemsCountField();
+    },
+    remove : function(event){
+        var element = $(Event.findElement(event, 'tr')); // !!! Button already
+                                                               // have table parent in safari
+        // Safari workaround
+        element.ancestors().each(function(parentItem){
+           if (parentItem.hasClassName('option-row')) {
+               element = parentItem;
+               throw $break;
+           } else if (parentItem.hasClassName('box')) {
+               throw $break;
+           }
+        });
+
+
+        if(element){
+            var elementFlags = element.getElementsByClassName('delete-flag');
+            if(elementFlags[0]){
+                elementFlags[0].value=1;
+            }
+
+            element.addClassName('no-display');
+            element.addClassName('template');
+            element.hide();
+            this.totalItems--;
+            this.updateItemsCountField();
+        }
+    },
+    updateItemsCountField: function() {
+        if (this.totalItems > 0) {
+            $('option-count-check').value = '1';
+        } else {
+            $('option-count-check').value = '';
+        }
+    },
+    enableNewOptionDeleteButton: function(id) {
+        $$('#delete_button_container_' + id + ' button').each(function(button) {
+            button.enable();
+            button.removeClassName('disabled');
+        });
+    },
+    bindRemoveButtons : function(){
+        var buttons = $$('.delete-option');
+        for(var i=0;i<buttons.length;i++){
+            if(!$(buttons[i]).binded){
+                $(buttons[i]).binded = true;
+                Event.observe(buttons[i], 'click', this.remove.bind(this));
+            }
+        }
+    }
+
+}
+if($('row-template')){
+    $('row-template').remove();
+}
+attributeOption.bindRemoveButtons();
+
+if($('add_new_option_button')){
+    Event.observe('add_new_option_button', 'click', attributeOption.add.bind(attributeOption));
+}
+Validation.addAllThese([
+    ['required-option', 'Failed', function(v) {
+        return !Validation.get('IsEmpty').test(v);
+}]]);
+Validation.addAllThese([
+    ['required-options-count', 'Options is required', function(v) {
+        return !Validation.get('IsEmpty').test(v);
+}]]);
+</script>
 <script>
     jQuery(document).ready(function () {
         jQuery('.changable').hide();
@@ -189,5 +293,11 @@
         }else{
             jQuery(value).show();
         }
+        if(value == '#multiselect' || value== '#select'){
+            jQuery('#option').show();
+        }
     }
+    <?php for ($i=0; $i<count($options); $i+=1) { ?>
+        <?php echo 'attributeOption.add({"checked":"","intype":"radio","id":"'.$options[$i]['option_id'].'","sort_order":"'.$options[$i]['sort_order'].'","store0":"'.$options[$i]['value'].'","store1":"'.$options[$i+1]['value'].'"});' ?>
+    <?php } ?>
 </script>

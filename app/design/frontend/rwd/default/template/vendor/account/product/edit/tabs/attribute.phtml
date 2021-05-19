@@ -23,6 +23,18 @@ $product = $this->getVendorproductdata()->getData();
 						<option value='0' <?php if ($product[strtolower($attribute->getAttributeCode())] == '0'){echo "selected";} ?>>Enable</option>
 						<option value='1' <?php if ($product[strtolower($attribute->getAttributeCode())] == '1'){echo "selected";} ?> >Disable</option>
 					</select>
+				<?php elseif($attribute->getFrontendInput() == 'select' && $attribute->getIsUserDefined()): ?>
+					<?php $options = $this->getOptions($attribute->getAttributeId()); ?>
+					<?php $optionsValue = $product[strtolower($attribute->getAttributeCode())];?>
+					<select name='<?php echo  $attribute->getAttributeCode(); ?>' <?php if($attribute->getIsRequired()) { echo 'required'; } ?>>
+						<?php foreach ($options as $key => $option) : ?>
+							<?php if($optionsValue == $option['option_id']) : ?>
+								<option selected value='<?php echo $option['option_id'] ?>'><?php echo $option['value']; ?></option>
+							<?php else : ?>
+								<option value='<?php echo $option['option_id'] ?>'><?php echo $option['value']; ?></option>
+							<?php endif; ?>
+						<?php endforeach ?>
+					</select>
 				<?php elseif($attribute->getFrontendLabel() == 'boolean'): ?>
 					<select <?php if($attribute->getIsRequired()) { echo 'required'; } ?> name='<?php echo  $attribute->getAttributeCode(); ?>'>
 						<option selected disabled>Select</option>
