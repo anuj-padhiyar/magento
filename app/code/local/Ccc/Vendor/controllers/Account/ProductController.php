@@ -91,7 +91,7 @@ class Ccc_Vendor_Account_ProductController extends Mage_Core_Controller_Front_Ac
                 $this->_redirect('*/*/edit',array('_current'=>true));
                 return;
             }
-            //$model = Mage::getSingleton('vendor/product');
+            $model = Mage::getSingleton('vendor/product');
             if($id){
                 $model->load($id);
             }
