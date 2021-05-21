@@ -8,25 +8,32 @@ class Ccc_Vendor_Block_Adminhtml_Product_Grid extends Mage_Adminhtml_Block_Widge
     }
 
     public function _prepareCollection(){
-        $collection = Mage::getResourceModel('vendor/product_request_collection')
-                        ->addFieldToFilter('request_status',['eq'=>'pending']);
-
+        $collection = Mage::getResourceModel('vendor/product_request_collection');
         $this->setCollection($collection);
         parent::_prepareCollection();
-        // die;
         return $this;
     }
 
     protected function _prepareColumns(){
-        $this->addColumn('request_type',
+        $this->addColumn('product_id',
+                array(
+                    'header' => Mage::helper('vendor')->__('Product ID'),
+                    'index' => 'product_id'
+                ))
+            ->addColumn('request_type',
                 array(
                     'header' => Mage::helper('vendor')->__('Request Type'),
                     'index'  => 'request_type',
                 ))
-            ->addColumn('product_id',
+            ->addColumn('catalog_product_id',
                 array(
-                    'header' => Mage::helper('vendor')->__('Product ID'),
-                    'index' => 'product_id'
+                    'header' => Mage::helper('vendor')->__('Catalog Product Id'),
+                    'index' => 'catalog_product_id'
+                ))
+            ->addColumn('request_status',
+                array(
+                    'header' => Mage::helper('vendor')->__('Request Status'),
+                    'index' => 'request_status'
                 ))
             ->addColumn('action',
                 array(

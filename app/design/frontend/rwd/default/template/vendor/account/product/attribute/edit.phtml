@@ -16,7 +16,7 @@
             <tr>
                 <td class="label"><label for="frontend_label">Admin</label></td>
                 <td>
-                    <input class="input-text required-option" type="text" name="frontend_label" value="<?php echo $this->getValue('frontend_label',$productAttribute);?>" ,$productAttributerequired/>
+                    <input <?php if($this->getRequest()->getParam('id')){echo "disabled";} ?> class="input-text required-option" type="text" name="frontend_label" value="<?php echo $this->getValue('frontend_label',$productAttribute);?>" ,$productAttributerequired/>
                 </td>
             </tr>
             <?php if($groups): ?>
@@ -47,7 +47,7 @@
             <tr>
                 <td class="label"><label for="frontend_input">Catalog Input Type for Store Owner</label></td>
                 <td class="value">
-                    <select id="frontend_input"  name="frontend_input" title="Catalog Input Type for Store Owner" class=" select">
+                    <select <?php if($this->getRequest()->getParam('id')){echo "disabled";} ?> id="frontend_input"  name="frontend_input" title="Catalog Input Type for Store Owner" class=" select">
                         <option value="text" selected="selected">Text Field</option>
                         <option value="textarea" <?php if($this->getValue('frontend_input',$productAttribute) == 'textarea'){echo "selected";} ?>>Text Area</option>
                         <option value="date" <?php if($this->getValue('frontend_input',$productAttribute) == 'date'){echo "selected";} ?>>Date</option>

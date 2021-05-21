@@ -12,7 +12,7 @@ class Ccc_Vendor_Block_Adminhtml_Product_Edit extends Mage_Adminhtml_Block_Widge
 		$this->_removeButton('delete');
 		$data = array(
 			'label' =>  'Approve',
-			'onclick'   => 'setLocation(\'' . $this->getUrl('*/*/approve',['_current'=>true]) . '\')',
+			'onclick'   => 'setLocation(\'' . $this->getUrl('*/*/accept',['_current'=>true]) . '\')',
 			'class'     =>  'save'
 	   );
 		$this->addButton ('approve', $data, 1, 0,  'header'); 

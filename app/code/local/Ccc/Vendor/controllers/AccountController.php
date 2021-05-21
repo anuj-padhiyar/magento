@@ -163,13 +163,9 @@ class Ccc_Vendor_AccountController extends Mage_Core_Controller_Front_Action{
 
         
         $vendor->setData($this->getRequest()->getPost());
-        // echo "<pre>";
-        // print_r($vendor);
-        // die;
         try {
             $errors = $this->_getVendorErrors($vendor);
             if (empty($errors)) {
-                die;
                 $vendor->save();
                 $session->setVendorAsLoggedIn($vendor);
                 $this->_redirect('vendor/account/index');
@@ -186,14 +182,8 @@ class Ccc_Vendor_AccountController extends Mage_Core_Controller_Front_Action{
             }
             $session->addError($message);
         } catch (Exception $e) {
-            // $message = $this->__($e->getMessage());
-            // print_r($e->getMessage());
-            // die;
-            // $session->setVendorFormData($this->getRequest()->getPost());
             $session->addException($e, $this->__($e->getMessage()));
         }
-
-        // die;
         $this->_redirectError($errUrl);
     }
 
@@ -204,7 +194,7 @@ class Ccc_Vendor_AccountController extends Mage_Core_Controller_Front_Action{
         $vendorForm = $this->_getVendorForm($vendor);
         $vendorData = $vendorForm->extractData($request);
         $vendorErrors = $vendorForm->validateData($vendorData);
-        if($this->_getVendor()->loadByEmail($vendor->email)){
+        if($this->_getVendor()->loadByEmail($vendor->email)->getId()){
             throw new exception("Email Already Exists");
         }
         if ($vendorErrors !== true) {

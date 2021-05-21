@@ -75,7 +75,6 @@ class Ccc_Vendor_Account_ProductController extends Mage_Core_Controller_Front_Ac
 
     public function saveAction(){
         try{
-            
             if(!$this->getRequest()->isPost()){
                 Mage::getSingleton('core/session')->addSuccess("Opps Getting Error");
                 $this->_redirect('*/*/');
@@ -114,17 +113,24 @@ class Ccc_Vendor_Account_ProductController extends Mage_Core_Controller_Front_Ac
             $model->save();
 
             $productRequest = Mage::getModel('vendor/product_request');
-            $productRequest->setVendorId($vendorId);
-            $productRequest->setProductId($model->getId());
-            if($id){
-                $productRequest->setRequestType('edit');
-            }else{
-                $productRequest->setRequestType('add');
+            $availableRequest = Mage::getModel('vendor/product_request')->getCollection()
+                                    ->addFieldToFilter('product_id', array('eq' => $model->entity_id))
+                                    ->addFieldToFilter('request_status', array('eq' => 'pending'))
+                                    ->addFieldToFilter('request_type', array('eq' => 'edit'));
+
+            if($availableRequest->count() == 0){
+                $productRequest->setVendorId($vendorId);
+                $productRequest->setProductId($model->getId());
+                if($id){
+                    $productRequest->setRequestType('edit');
+                }else{
+                    $productRequest->setRequestType('add');
+                }
+                $productRequest->setRequestStatus('pending');
+                date_default_timezone_set('Asia/Kolkata');
+                $productRequest->setRequestDate(date('j/m/Y  h:i:s A'));
+                $productRequest->save();
             }
-            $productRequest->setRequestStatus('pending');
-            date_default_timezone_set('Asia/Kolkata');
-            $productRequest->setRequestDate(date('j/m/Y  h:i:s A'));
-            $productRequest->save();
             
             Mage::getSingleton('core/session')->addSuccess("Request Sended For Vendor Add/Edit");
             $this->_redirect('*/*/');

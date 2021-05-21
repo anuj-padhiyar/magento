@@ -20,12 +20,8 @@
                     <td><?php echo $product['price']; ?></td>
                     <td><?php echo $request['request_status']; ?></td>
                     <td><?php echo $request['request_type']; ?></td>
-                    <?php if($request['request_status'] == 'approved' || $request['request_status'] == 'unapproved'): ?>
-                        <td><a href="<?php echo $this->getUrl('*/*/edit',array('id'=>$product['entity_id'])); ?>">Edit</a></td>
-                        <td><a href="<?php echo $this->getUrl('*/*/delete',array('id'=>$product['entity_id'])); ?>">Delete</a></td>
-                    <?php else: ?>
-                        <td><a href="<?php echo $this->getUrl('*/*/edit',array('id'=>$product['entity_id'],'okay'=>1)); ?>">View</a></td>
-                    <?php endif; ?>
+                    <td><a href="<?php echo $this->getUrl('*/*/edit',array('id'=>$product['entity_id'])); ?>">Edit</a></td>
+                    <td><a href="<?php echo $this->getUrl('*/*/delete',array('id'=>$product['entity_id'])); ?>">Delete</a></td>
                 </tr>
             <?php endforeach; ?>
         <?php else: ?>
