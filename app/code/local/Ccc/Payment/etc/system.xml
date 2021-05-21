@@ -2,6 +2,13 @@
 <config>
     <sections>
         <payment translate="label" module="payment">
+            <label>Payment Methods</label>
+            <tab>sales</tab>
+            <frontend_type>text</frontend_type>
+            <sort_order>400</sort_order>
+            <show_in_default>1</show_in_default>
+            <show_in_website>1</show_in_website>
+            <show_in_store>1</show_in_store>
             <groups>
                 <cod translate="label">
                     <label>COD</label>
