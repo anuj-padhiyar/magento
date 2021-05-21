@@ -260,6 +260,7 @@ abstract class Mage_Eav_Model_Form
 
             $this->_attributes      = array();
             $this->_userAttributes  = array();
+            
             foreach ($collection as $attribute) {
                 /* @var $attribute Mage_Eav_Model_Entity_Attribute */
                 $this->_attributes[$attribute->getAttributeCode()] = $attribute;

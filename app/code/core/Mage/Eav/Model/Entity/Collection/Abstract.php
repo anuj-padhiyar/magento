@@ -451,7 +451,7 @@ abstract class Mage_Eav_Model_Entity_Collection_Abstract extends Varien_Data_Col
                 );
             }
             $this->_selectAttributes[$attrInstance->getAttributeCode()] = $attrInstance->getId();
-        }
+        }   
         return $this;
     }
 
@@ -666,7 +666,6 @@ abstract class Mage_Eav_Model_Entity_Collection_Abstract extends Varien_Data_Col
         );
 
         $this->_addAttributeJoin($alias, $joinType);
-
         return $this;
     }
 
