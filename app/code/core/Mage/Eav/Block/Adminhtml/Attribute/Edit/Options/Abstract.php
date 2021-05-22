@@ -130,6 +130,7 @@ abstract class Mage_Eav_Block_Adminhtml_Attribute_Edit_Options_Abstract extends 
         }
 
         $values = $this->getData('option_values');
+
         if (is_null($values)) {
             $values = array();
             $optionCollection = Mage::getResourceModel('eav/entity_attribute_option_collection')
@@ -159,6 +160,9 @@ abstract class Mage_Eav_Block_Adminhtml_Attribute_Edit_Options_Abstract extends 
             $this->setData('option_values', $values);
         }
 
+        // echo "<pre>";
+        // print_r($values);
+        // die;
         return $values;
     }
 

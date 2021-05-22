@@ -2,6 +2,7 @@
 
 class Ccc_Vendor_Adminhtml_Product_AttributeController extends Mage_Adminhtml_Controller_Action{
     protected $_entityTypeId;
+    const XML_PATH_ALLOWED_TAGS = 'system/catalog/frontend/allowed_html_tags_list';
 
     public function indexAction(){
         $this->loadLayout();

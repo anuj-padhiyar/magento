@@ -28,6 +28,39 @@ class Ccc_Vendor_Block_Account_Product_Edit_Tabs_Attributes extends Mage_Core_Bl
 
         return $options->getData();        
     }
+
+    public function getOptionValues($id){
+        $optionCollection = Mage::getResourceModel('eav/entity_attribute_option_collection')
+                            ->setAttributeFilter($id)
+                            ->setPositionOrder('desc', true)
+                            ->load();
+        $optionValue = [];
+        foreach ($optionCollection as $option) {
+            $options = $this->getOptions($option->attribute_id);
+            $optionValue[] = $this->getValues($options,$option->option_id);
+        }
+        return $optionValue;
+    }
+    
+    public function getValues($data,$optionId)
+    {
+       
+        $value = [];
+        if($data){
+            foreach($data as $key=>$option){
+                if($option['option_id'] == $optionId){
+                    $value['store'.$option['store_id']] = $option['value'];
+                    $value['option_id'] = $option['option_id'];
+                    if($option['default_id'] == $optionId){
+                        $value['default'] = 1;
+                    }else{
+                        $value['default'] = 0;
+                    }
+                }
+            }
+        }
+        return $value;
+    }
 }
 
 ?>

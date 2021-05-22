@@ -26,14 +26,11 @@ $product = $this->getVendorproductdata()->getData();
 				<?php elseif($attribute->getFrontendInput() == 'select' && $attribute->getIsUserDefined()): ?>
 					<?php $options = $this->getOptions($attribute->getAttributeId()); ?>
 					<?php $optionsValue = $product[strtolower($attribute->getAttributeCode())];?>
-					<select name='<?php echo  $attribute->getAttributeCode(); ?>' id="<?php if($attribute->getIsRequired()) { echo 'required'; } ?>">
+					<?php $options = $this->getOptionValues($attribute->getAttributeId()); ?>
+					<select id="<?php if($attribute->getIsRequired()) { echo 'required'; } ?>" name='<?="{$attribute->getAttributeCode()}[]";?>'>
 						<?php foreach ($options as $key => $option) : ?>
-							<?php if($optionsValue == $option['option_id']) : ?>
-								<option selected value='<?php echo $option['option_id'] ?>'><?php echo $option['value']; ?></option>
-							<?php else : ?>
-								<option value='<?php echo $option['option_id'] ?>'><?php echo $option['value']; ?></option>
-							<?php endif; ?>
-						<?php endforeach ?>
+							<option <?php if($option['default']){ echo "selected";} ?> value='<?php echo $option["option_id"] ?>'><?php echo $option['store0']; ?></option>
+						<?php endforeach; ?>
 					</select>
 				<?php elseif($attribute->getFrontendLabel() == 'boolean'): ?>
 					<select id="<?php if($attribute->getIsRequired()) { echo 'required'; } ?>" name='<?php echo  $attribute->getAttributeCode(); ?>'>
@@ -52,14 +49,10 @@ $product = $this->getVendorproductdata()->getData();
 				<?php elseif($attribute->getFrontendInput() == 'multiselect'): ?>
 					<?php $optionsValue = $product[strtolower($attribute->getAttributeCode())]; ?>
 					<?php $optionsValue = explode(',', $optionsValue); ?>	
-					<?php $options = $this->getOptions($attribute->getAttributeId()); ?>
+					<?php $options = $this->getOptionValues($attribute->getAttributeId()); ?>
 					<select id="<?php if($attribute->getIsRequired()) { echo 'required'; } ?>" multiple name='<?="{$attribute->getAttributeCode()}[]";?>'>
 						<?php foreach ($options as $key => $option) : ?>
-							<?php if(in_array($option['option_id'], $optionsValue)) : ?>
-								<option selected="" value='<?php echo $option["option_id"] ?>'><?php echo $option['value']; ?></option>
-							<?php else: ?>
-								<option value='<?php echo $option["option_id"]; ?>'><?php echo $option['value']; ?></option>
-							<?php endif; ?>
+							<option <?php if($option['default']){ echo "selected";} ?> value='<?php echo $option["option_id"] ?>'><?php echo $option['store0']; ?></option>
 						<?php endforeach; ?>
 					</select>
 				<?php endif; ?>

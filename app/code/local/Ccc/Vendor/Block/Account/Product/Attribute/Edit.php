@@ -64,5 +64,69 @@ class Ccc_Vendor_Block_Account_Product_Attribute_Edit extends Mage_Core_Block_Te
 
         return $options->getData();        
     }
+
+    public function getOptionValues($id)
+    {
+        $inputType = 'radio';
+        $optionCollection = Mage::getResourceModel('eav/entity_attribute_option_collection')
+                            ->setAttributeFilter($id)
+                            ->setPositionOrder('desc', true)
+                            ->load();
+                
+        $defaultValues = array();
+        foreach ($optionCollection as $option) {
+            $value = array();
+            if (in_array($option->getId(), $defaultValues)) {
+                $value['checked'] = 'checked="checked"';
+            } else {
+                $value['checked'] = '';
+            }
+
+            $value['intype'] = $inputType;
+            $value['id'] = $option->getId();
+            $value['sort_order'] = $option->getSortOrder();
+
+            $options = $this->getOptions($option->attribute_id);
+            $stores = $this->getStores($options,$option->option_id);
+            $value = array_merge($value, $stores);
+            
+            if($this->getDefaultValue($options,$option->option_id)){
+                $value['checked'] = 'checked="checked"';
+            }else{
+                $value['checked'] = '';
+            }
+
+            $values[] = new Varien_Object($value);
+        }
+        $this->setData('option_values', $values);
+        return $values;
+    }
+
+    
+    public function getDefaultValue($data,$optionId)
+    {
+        if($data){
+            foreach($data as $key=>$value){
+                if($value['default_value'] == $optionId){
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    public function getStores($data,$optionId)
+    {
+        $stores = [];
+        if($data){
+            foreach($data as $key=>$value){
+                if($value['option_id'] == $optionId){
+                    $stores['store'.$value['store_id']] = $value['value'];
+                }
+            }
+        }
+        return $stores;
+    }
+
 }
 ?>

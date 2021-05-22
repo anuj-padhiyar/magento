@@ -3,8 +3,8 @@
 <?php //echo "<pre>"; print_r($productAttribute); die; ?>
 <?php $groups = $this->getGroups(); ?>
 <?php $options = $this->getOptions($productAttribute->getId()); ?>
-
-<?php ///echo "<pre>"; print_r($options); die; ?>
+<?php $this->getOptionValues($productAttribute->getId()); ?>
+<?php //echo "<pre>"; print_r($options); die; ?>
 
 
 <h1><?php echo $this->getHeaderText(); ?></h1>
@@ -165,7 +165,7 @@ var templateText =
             '<td><input name="option[value][{{id}}][0]" placeholder="Admin" value="{{store0}}" style="width:95%" class="input-text required-option" type="text" /><\/td>'+
             '<td><input name="option[value][{{id}}][1]" value="{{store1}}" style="width:95%" placeholder="Default Store View" class="input-text" type="text" /><\/td>'+
             '<td><input class="input-text" type="text" name="option[order][{{id}}]" value="{{sort_order}}" style="width:95%"placeholder="Position"/><\/td>'+
-            '<td class="a-center"><input class="input-radio" type="{{intype}}" name="defaul][]" value="{{id}}" {{checked}} /><\/td>'+
+            '<td class="a-center"><input class="input-radio" type="{{intype}}" name="default[]" value="{{id}}" {{checked}} /><\/td>'+
             '<td class="a-left" id="delete_button_container_{{id}}">'+
                 '<input type="hidden" class="delete-flag" name="option[delete][{{id}}]" value="" />'+
                                     '<button  id="id_c800e40efe4de6e36e40b891ffb357e4" title="Delete" type="button" class="scalable delete delete-option" onclick="" style=""><span><span><span>Delete</span></span></span></button>'+
@@ -199,9 +199,7 @@ var attributeOption = {
         this.updateItemsCountField();
     },
     remove : function(event){
-        var element = $(Event.findElement(event, 'tr')); // !!! Button already
-                                                               // have table parent in safari
-        // Safari workaround
+        var element = $(Event.findElement(event, 'tr'));
         element.ancestors().each(function(parentItem){
            if (parentItem.hasClassName('option-row')) {
                element = parentItem;
@@ -297,7 +295,7 @@ Validation.addAllThese([
             jQuery('#option').show();
         }
     }
-    <?php for ($i=0; $i<count($options); $i+=1) { ?>
+    <?php for ($i=0; $i<count($options); $i+=2) { ?>
         <?php echo 'attributeOption.add({"checked":"","intype":"radio","id":"'.$options[$i]['option_id'].'","sort_order":"'.$options[$i]['sort_order'].'","store0":"'.$options[$i]['value'].'","store1":"'.$options[$i+1]['value'].'"});' ?>
     <?php } ?>
 </script>
