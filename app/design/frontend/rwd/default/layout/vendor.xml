@@ -18,22 +18,14 @@
                 <urlParams />
                 <position>200</position>
             </action>
-            <action method="addLink" translate="label title before_text" module="vendor">
+            <!-- <action method="addLink" translate="label title before_text" module="vendor">
                 <label>Vendor Login</label>
                 <url helper="vendor/getLoginUrl" />
                 <title>Login</title>
                 <prepare />
                 <urlParams />
                 <position>200</position>
-            </action>
-            <action method="addLink" translate="label title before_text" module="vendor">
-                <label>Vendor Logout</label>
-                <url helper="vendor/getLogoutUrl" />
-                <title>Login</title>
-                <prepare />
-                <urlParams />
-                <position>200</position>
-            </action>
+            </action> -->
         </reference>
     </default>
 
@@ -68,22 +60,6 @@
             </block>
         </reference>
     </vendor_account_create>
-
-    <vendor_logged_in>
-        <reference name="top.links">
-            <action method="removeLinkByUrl">
-                <url helper="vendor/getRegisterUrl" />
-            </action>
-            <action method="addLink" translate="label title" module="vendor">
-                <label>Log Out Vendor</label>
-                <url helper="vendor/getLogoutUrl" />
-                <title>Log Out Vendor</title>
-                <prepare />
-                <urlParams />
-                <position>100</position>
-            </action>
-        </reference>
-    </vendor_logged_in>
 
     <vendor_account_index translate="label">
         <label>Vendor My Account Dashboard</label>
@@ -227,4 +203,18 @@
             <block type="core/template" template="catalog/wysiwyg/js.phtml"/>
         </reference>
 	</vendor_account_product_edit>	
+
+    <vendor_logged_in>
+        <reference name="top.links">
+            <action method="removeLinkByUrl"><url helper="vendor/getRegisterUrl" /></action>
+            <action method="addLink" translate="label title" module="vendor"><label>Vendor Log Out</label><url helper="vendor/getLogoutUrl"/><title>Log Out</title><prepare/><urlParams/><position>100</position></action>
+        </reference>
+    </vendor_logged_in>
+
+    <vendor_logged_out>
+        <reference name="top.links">
+            <action method="addLink" translate="label title" module="vendor"><label>Vendor Log In</label><url helper="vendor/getLoginUrl"/><title>Log In</title><prepare/><urlParams/><position>100</position></action>
+        </reference>
+        <remove name="reorder"></remove>
+    </vendor_logged_out>
 </layout>

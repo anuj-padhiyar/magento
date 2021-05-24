@@ -22,16 +22,24 @@
                 </Ccc_Vendor>
             </updates>
         </layout>
-		<!-- <events>
-            <vendor_login>
+		<events>
+            <controller_action_layout_load_before>
                 <observers>
-                    <vendor_loggedin>
+                    <vendor_is_logged_in_observer>
                         <class>vendor/observer</class>
                         <method>beforeLoadLayout</method>
-                    </vendor_loggedin>
+                    </vendor_is_logged_in_observer>
                 </observers>
-            </vendor_login>
-    	</events> -->
+            </controller_action_layout_load_before>
+            <sales_model_service_quote_submit_after>
+                <observers>
+                    <restore_vendor_group_id>
+                        <class>vendor/observer</class>
+                        <method>quoteSubmitAfter</method>
+                    </restore_vendor_group_id>
+                </observers>
+            </sales_model_service_quote_submit_after>
+        </events>
     </frontend>
     <admin>
 		<routers>
