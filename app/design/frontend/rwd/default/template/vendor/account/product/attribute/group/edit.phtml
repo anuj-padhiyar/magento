@@ -1,0 +1,34 @@
+<?php $group = Mage::registry('group'); ?>
+<h1><?php echo $this->getHeaderText(); ?></h1>
+<form action="<?php echo $this->getSaveUrl(); ?>" method="POST">
+    <a class="button" href="<?php echo $this->getUrl('*/*/index'); ?>">Back</a>
+    <button class="button" type="submit">Save</button><br><br>
+    <table cellspacing="0" class="form-list">
+        <tbody>
+            <tr>
+                <td class="label"><label for="name">Name</label></td>
+                <td class="value">
+                    <input type="text" name="attribute_group_name" value="<?php echo $group->getAttributeGroupName(); ?>">
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</form>
+<br><br>
+<?php if($id = $this->getRequest()->getParam('id')): ?>
+<h1>Attributes</h1>
+<form method="POST" action="<?php echo $this->getUrl('*/*/removeAttribute',array('id'=>$id)); ?>">
+    <table>
+        <tr>
+            <?php foreach($this->getAttributes() as $key=>$value): ?>
+                <?php foreach($value as $key=>$id): ?>
+                    <input type="checkbox" name="<?php echo $id; ?>"><?php echo $this->getAttributeName($id); ?><br>
+                <?php endforeach; ?>
+            <?php endforeach; ?>
+        </tr>
+        <tr>
+            <button class="button" type="submit">Delete Attribute</button>
+        </tr>
+    </table>
+</form>
+<?php endif; ?>

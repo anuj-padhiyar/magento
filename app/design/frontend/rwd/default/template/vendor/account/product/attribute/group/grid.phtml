@@ -1,0 +1,22 @@
+<?php echo $this->getMessagesBlock()->toHtml(); ?>
+<?php $groups = $this->_prepareCollection(); ?>
+
+<h1>Product Group Grid</h1>
+<a class="button" href="<?php echo $this->getUrl('*/*/edit'); ?>">Add Attribute Group</a>
+<table border="1" width="100%">
+    <tr>
+        <th>Group Name</th>
+        <th colspan="2">Action</th>
+    </tr>
+    <?php if($groups->count()): ?>
+        <?php foreach($groups->getData() as $key=>$group): ?>
+            <tr>
+                <td><?php echo $group['attribute_group_name']; ?></td>
+                <td><a href="<?php echo $this->getUrl('*/*/edit',['id'=>$group['group_id']]); ?>">Edit</a></td>
+                <td><a href="<?php echo $this->getUrl('*/*/delete',['id'=>$group['attribute_group_id']]); ?>">Delete</a></td>
+            </tr>
+        <?php endforeach; ?>
+    <?php else: ?>
+        <td colspan="3">No Record Found</td>
+    <?php endif; ?>
+</table>

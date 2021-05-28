@@ -1,0 +1,29 @@
+<h1><?php echo $this->getHeaderText(); ?></h1>
+<center><div id="messageHtml" class="error"></div></center>
+<form id="productForm" method="post" action="<?php echo $this->getUrl('*/*/save',['id'=>$this->getRequest()->getParam('id')]); ?>">
+    <a class="button" href="<?php echo $this->getUrl('*/*/index'); ?>">Back</a>    
+    <a class="button" onclick="return checkDetails()">Save Product</a>
+    <div id="product_edit"></div>
+</form>
+
+
+<script>
+    function checkDetails() {
+        flag = 0;
+        jQuery("input,select,textarea").each(function(){
+            if(jQuery(this).attr("id") == "required"){
+                if(jQuery(this).val() == "" || jQuery(this).val() == undefined){
+                    ptag = jQuery(this).parent().prev().children()[0];
+                    alert("Please Fill "+jQuery(ptag).text()+" value");
+                    flag = 1;
+                    return false;
+                }
+            }
+        });
+        if(flag){
+            return false;
+        }else{
+            jQuery("#productForm").submit();
+        }
+    };
+</script>

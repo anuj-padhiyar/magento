@@ -1,7 +1,6 @@
 <?php 
 
 $this->startSetup();
-
 $this->addEntityType(Ccc_Test_Model_Resource_Test::ENTITY,[
 	'entity_model'=>'test/test',
 	'attribute_model'=>'test/attribute',

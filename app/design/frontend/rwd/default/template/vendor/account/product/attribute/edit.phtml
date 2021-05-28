@@ -1,0 +1,301 @@
+<?php echo $this->getMessagesBlock()->toHtml(); ?>
+<?php $productAttribute = Mage::registry('product_attribute'); ?>
+<?php //echo "<pre>"; print_r($productAttribute); die; ?>
+<?php $groups = $this->getGroups(); ?>
+<?php $options = $this->getOptions($productAttribute->getId()); ?>
+<?php $this->getOptionValues($productAttribute->getId()); ?>
+<?php //echo "<pre>"; print_r($options); die; ?>
+
+
+<h1><?php echo $this->getHeaderText(); ?></h1>
+<form action="<?php echo $this->getUrl('*/*/save',array('id'=>$this->getRequest()->getParam('id'))); ?>" method="POST">
+    <a class="button" href="<?php echo $this->getUrl('*/*/'); ?>">Back</a>
+    <button class="button" type="submit">Save</button>
+    <table cellspacing="0" class="form-list">
+        <tbody>
+            <tr>
+                <td class="label"><label for="frontend_label">Admin</label></td>
+                <td>
+                    <input <?php if($this->getRequest()->getParam('id')){echo "disabled";} ?> class="input-text required-option" type="text" name="frontend_label" value="<?php echo $this->getValue('frontend_label',$productAttribute);?>" ,$productAttributerequired/>
+                </td>
+            </tr>
+            <?php if($groups): ?>
+                <tr>
+                    <td class="label"><label for="group">Group</label></td>
+                    <td class="value">
+                        <select id="group" name="group" title="Scope" class=" select">
+                            <option disabled selected>Select Group</option>
+                            <?php foreach($groups->getData() as $key=>$group): ?>
+                                <option value="<?php echo $group['attribute_group_id'];?>" <?php if($group['attribute_group_id'] == $this->getCurrentGroup()){echo "selected";} ?>><?php echo $group['attribute_group_name']; ?></option>
+                            <?php endforeach; ?>
+                        </select>
+                        <p class="note" id="note_is_global"><span>Declare attribute value saving scope</span></p>
+                    </td>
+                </tr>
+            <?php endif; ?>
+            <tr id="scope">
+                <td class="label"><label for="is_global">Scope</label></td>
+                <td class="value">
+                    <select id="is_global" name="is_global" title="Scope" class=" select">
+                        <option value="0" selected="selected">Store View</option>
+                        <option value="2" <?php if($this->getValue('is_global',$productAttribute) == '2'){echo "selected";} ?>>Website</option>
+                        <option value="1" <?php if($this->getValue('is_global',$productAttribute) == '1'){echo "selected";} ?>>Global</option>
+                    </select>
+                    <p class="note" id="note_is_global"><span>Declare attribute value saving scope</span></p>
+                </td>
+            </tr>
+            <tr>
+                <td class="label"><label for="frontend_input">Catalog Input Type for Store Owner</label></td>
+                <td class="value">
+                    <select <?php if($this->getRequest()->getParam('id')){echo "disabled";} ?> id="frontend_input"  name="frontend_input" title="Catalog Input Type for Store Owner" class=" select">
+                        <option value="text" selected="selected">Text Field</option>
+                        <option value="textarea" <?php if($this->getValue('frontend_input',$productAttribute) == 'textarea'){echo "selected";} ?>>Text Area</option>
+                        <option value="date" <?php if($this->getValue('frontend_input',$productAttribute) == 'date'){echo "selected";} ?>>Date</option>
+                        <option value="boolean" <?php if($this->getValue('frontend_input',$productAttribute) == 'boolean'){echo "selected";} ?>>Yes/No</option>
+                        <option value="multiselect" <?php if($this->getValue('frontend_input',$productAttribute) == 'multiselect'){echo "selected";} ?>>Multiple Select</option>
+                        <option value="select" <?php if($this->getValue('frontend_input',$productAttribute) == 'select'){echo "selected";} ?>>Dropdown</option>
+                        <option value="price" <?php if($this->getValue('frontend_input',$productAttribute) == 'price'){echo "selected";} ?>>Price</option>
+                        <option value="media_image" <?php if($this->getValue('frontend_input',$productAttribute) == 'media_image'){echo "selected";} ?>>Media Image</option>
+                    </select>
+                </td>
+            </tr>
+            <tr id="text" class="changable">
+                <td class="label"><label for="default_value_text">Default Value</label></td>
+                <td class="value">
+                    <input id="default_value_text" name="default_value_text" value="<?php echo $this->getValue('default_value',$productAttribute); ?>" title="Default Value" type="text" class=" input-text" />
+                </td>
+            </tr>
+            <tr id="boolean" class="changable">
+                <td class="label"><label for="default_value_yesno">Default Value</label></td>
+                <td class="value">
+                    <select id="default_value_yesno" name="default_value_yesno" title="Default Value" class=" select">
+                        <option value="0" selected="selected">No</option>
+                        <option value="1" <?php if($this->getValue('default_value',$productAttribute) == '1'){echo "selected";} ?>>Yes</option>
+                    </select>
+                </td>
+            </tr>
+            <tr id="date" class="changable">
+                <td class="label"><label for="default_value_date">Default Value</label></td>
+                <td class="value">
+                    <input type="date" name="default_value_date" id="default_value_date" value="<?php echo $this->getValue('default_value',$productAttribute); ?>" title="Default Value" type="text" class=" input-text" style="width:110px !important;" /> <img src="http://127.0.0.1/phpCode/magento/skin/adminhtml/default/default/images/grid-cal.gif" alt="" class="v-middle" id="default_value_date_trig" title="Select Date" style="" />
+                </td>
+            </tr>
+            <tr id="textarea" class="changable">
+                <td class="label"><label for="default_value_textarea">Default Value</label></td>
+                <td class="value">
+                    <textarea id="default_value_textarea" name="default_value_textarea" title="Default Value" rows="2" cols="15" class=" textarea"><?php echo $this->getValue('default_value',$productAttribute); ?></textarea>
+                </td>
+            </tr>
+            <tr id="unique">
+                <td class="label"><label for="is_unique">Unique Value</label></td>
+                <td class="value">
+                    <select id="is_unique" name="is_unique" title="Unique Value (not shared with other products)" class=" select">
+                        <option value="0" selected="selected">No</option>
+                        <option value="1" <?php if($this->getValue('is_unique',$productAttribute) == '1'){echo "selected";} ?>>Yes</option>
+                    </select>
+                    <p class="note" id="note_is_unique"><span>Not shared with other products</span></p>
+                </td>
+            </tr>
+            <tr id="required" >
+                <td class="label"><label for="is_required">Values Required</label></td>
+                <td class="value">
+                    <select id="is_required" name="is_required" title="Values Required" class=" select">
+                        <option value="0" selected="selected">No</option>
+                        <option value="1" <?php if($this->getValue('is_required',$productAttribute) == '1'){echo "selected";} ?>>Yes</option>
+                    </select>
+                </td>
+            </tr>
+            <tr id="frontend" class="changable">
+                <td class="label"><label for="frontend_class">Input Validation for Store Owner</label></td>
+                <td class="value">
+                    <select id="frontend_class" name="frontend_class" title="Input Validation for Store Owner" class=" select">
+                        <option value="" selected="selected">None</option>
+                        <option value="validate-number" <?php if($this->getValue('frontend_class',$productAttribute) == 'validate-number'){echo "selected";} ?>>Decimal Number</option>
+                        <option value="validate-digits" <?php if($this->getValue('frontend_class',$productAttribute) == 'validate-digits'){echo "selected";} ?>>Integer Number</option>
+                        <option value="validate-email" <?php if($this->getValue('frontend_class',$productAttribute) == 'validate-email'){echo "selected";} ?>>Email</option>
+                        <option value="validate-url" <?php if($this->getValue('frontend_class',$productAttribute) == 'validate-url'){echo "selected";} ?>>URL</option>
+                        <option value="validate-alpha" <?php if($this->getValue('frontend_class',$productAttribute) == 'validate-alpha'){echo "selected";} ?>>Letters</option>
+                        <option value="validate-alphanum" <?php if($this->getValue('frontend_class',$productAttribute) == 'validate-alphanum'){echo "selected";} ?>>Letters (a-z, A-Z) or Numbers (0-9)</option>
+                    </select>
+                </td>
+            </tr>
+        </tbody>
+    </table><br><br>
+    <div class="box changable" id="option"  >
+        <div class="entry-edit-head">
+            <h4 class="icon-head head-edit-form fieldset-legend"><?php echo Mage::helper('catalog')->__('Manage Options (values of your attribute)') ?></h4>
+        </div>
+        <div class="hor-scroll">
+            <table class="dynamic-grid" cellspacing="0" cellpadding="0">
+                <tr id="attribute-options-table">
+                    <th style="width:22%"><b>Name</b></th>
+                    <th style="width:22%"><b>Default Store Value</b></th>
+                    <th style="width:22%"><b>Sort Order</b></th>
+                    <th><b>Is Default</b></th>
+                    <th>
+                        <button  id="add_new_option_button" title="Add Option" type="button" class="scalable add" onclick="" style=""><span><span><span>Add Option</span></span></span></button>
+                    </th>
+                    <tr class="no-display template" id="row-template">
+                        <td><input name="option[value][{{id}}][0]" placeholder="Admin" value="{{store0}}" class=" required-option" type="text" /></td>
+                        <td><input name="option[value][{{id}}][1]" placeholder="Default Store View"  value="{{store1}}" class="" type="text" /></td>
+                        <td class="a-center"><input class="" type="text" name="option[order][{{id}}]" value="{{sort_order}}" placeholder="Position" /></td>
+                        <td><input class="input-radio" type="radio" name="default[]" value="{{id}}" /></td>
+                        <td class="a-left">
+                            <input type="hidden" class="delete-flag" name="option[delete][{{id}}]" value="" />
+                            <button  id="id_c800e40efe4de6e36e40b891ffb357e4" title="Delete" type="button" class="scalable delete delete-option" onclick="" style=""><span><span><span>Delete</span></span></span></button>
+                        </td>
+                    </tr>
+                </tr>
+            </table>
+        </div>
+        <input type="hidden" id="option-count-check" value="" />
+    </div>
+</div>
+</form>
+
+
+
+<script type="text/javascript">
+//<![CDATA[
+var optionDefaultInputType = 'radio';
+
+// IE removes quotes from element.innerHTML whenever it thinks they're not needed, which breaks html.
+var templateText =
+        '<tr class="option-row">'+
+            '<td><input name="option[value][{{id}}][0]" placeholder="Admin" value="{{store0}}" style="width:95%" class="input-text required-option" type="text" /><\/td>'+
+            '<td><input name="option[value][{{id}}][1]" value="{{store1}}" style="width:95%" placeholder="Default Store View" class="input-text" type="text" /><\/td>'+
+            '<td><input class="input-text" type="text" name="option[order][{{id}}]" value="{{sort_order}}" style="width:95%"placeholder="Position"/><\/td>'+
+            '<td class="a-center"><input class="input-radio" type="{{intype}}" name="default[]" value="{{id}}" {{checked}} /><\/td>'+
+            '<td class="a-left" id="delete_button_container_{{id}}">'+
+                '<input type="hidden" class="delete-flag" name="option[delete][{{id}}]" value="" />'+
+                                    '<button  id="id_c800e40efe4de6e36e40b891ffb357e4" title="Delete" type="button" class="scalable delete delete-option" onclick="" style=""><span><span><span>Delete</span></span></span></button>'+
+                            '<\/td>'+
+        '<\/tr>';
+
+var attributeOption = {
+    table : $('attribute-options-table'),
+    templateSyntax : /(^|.|\r|\n)({{(\w+)}})/,
+    templateText : templateText,
+    itemCount : 0,
+    totalItems : 0,
+    isReadOnly: 0,
+    add : function(data) {
+        this.template = new Template(this.templateText, this.templateSyntax);
+        var isNewOption = false;
+        if(!data.id){
+            data = {};
+            data.id  = 'option_'+this.itemCount;
+            isNewOption = true;
+        }
+        if (!data.intype)
+            data.intype = optionDefaultInputType;
+        Element.insert(this.table, {after: this.template.evaluate(data)});
+        if (isNewOption && !this.isReadOnly) {
+            this.enableNewOptionDeleteButton(data.id);
+        }
+        this.bindRemoveButtons();
+        this.itemCount++;
+        this.totalItems++;
+        this.updateItemsCountField();
+    },
+    remove : function(event){
+        var element = $(Event.findElement(event, 'tr'));
+        element.ancestors().each(function(parentItem){
+           if (parentItem.hasClassName('option-row')) {
+               element = parentItem;
+               throw $break;
+           } else if (parentItem.hasClassName('box')) {
+               throw $break;
+           }
+        });
+
+
+        if(element){
+            var elementFlags = element.getElementsByClassName('delete-flag');
+            if(elementFlags[0]){
+                elementFlags[0].value=1;
+            }
+
+            element.addClassName('no-display');
+            element.addClassName('template');
+            element.hide();
+            this.totalItems--;
+            this.updateItemsCountField();
+        }
+    },
+    updateItemsCountField: function() {
+        if (this.totalItems > 0) {
+            $('option-count-check').value = '1';
+        } else {
+            $('option-count-check').value = '';
+        }
+    },
+    enableNewOptionDeleteButton: function(id) {
+        $$('#delete_button_container_' + id + ' button').each(function(button) {
+            button.enable();
+            button.removeClassName('disabled');
+        });
+    },
+    bindRemoveButtons : function(){
+        var buttons = $$('.delete-option');
+        for(var i=0;i<buttons.length;i++){
+            if(!$(buttons[i]).binded){
+                $(buttons[i]).binded = true;
+                Event.observe(buttons[i], 'click', this.remove.bind(this));
+            }
+        }
+    }
+
+}
+if($('row-template')){
+    $('row-template').remove();
+}
+attributeOption.bindRemoveButtons();
+
+if($('add_new_option_button')){
+    Event.observe('add_new_option_button', 'click', attributeOption.add.bind(attributeOption));
+}
+Validation.addAllThese([
+    ['required-option', 'Failed', function(v) {
+        return !Validation.get('IsEmpty').test(v);
+}]]);
+Validation.addAllThese([
+    ['required-options-count', 'Options is required', function(v) {
+        return !Validation.get('IsEmpty').test(v);
+}]]);
+</script>
+<script>
+    jQuery(document).ready(function () {
+        jQuery('.changable').hide();
+        jQuery('#text').show();
+        jQuery('#frontend').show();
+        showData();
+    });
+    jQuery('#frontend_input').change(showData);
+    function showData() {
+        jQuery('.changable').hide();
+        jQuery('#required').show();
+        jQuery('#unique').show();  
+        jQuery('#scope').show();
+        value = '#'+jQuery('#frontend_input').val();
+        if(value == '#media_image'){
+            jQuery('#frontend').hide();
+            jQuery('#required').hide();
+            jQuery('#unique').hide();   
+        }else if(value == '#text'){
+            jQuery(value).show();
+            jQuery('#frontend').show();
+        }else if(value == '#price'){
+            jQuery('#text').show();
+            jQuery('#scope').hide();
+        }else{
+            jQuery(value).show();
+        }
+        if(value == '#multiselect' || value== '#select'){
+            jQuery('#option').show();
+        }
+    }
+    <?php for ($i=0; $i<count($options); $i+=2) { ?>
+        <?php echo 'attributeOption.add({"checked":"","intype":"radio","id":"'.$options[$i]['option_id'].'","sort_order":"'.$options[$i]['sort_order'].'","store0":"'.$options[$i]['value'].'","store1":"'.$options[$i+1]['value'].'"});' ?>
+    <?php } ?>
+</script>

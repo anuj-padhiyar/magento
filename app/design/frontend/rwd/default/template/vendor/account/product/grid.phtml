@@ -1,0 +1,33 @@
+<?php $products = $this->_prepareCollection(); ?>
+<h1>Product Grid</h1>
+<a class="button" href="<?php echo $this->getUrl('*/*/edit'); ?>">Add Product</a>
+<form>
+    <table width="100%" border="1">
+        <tr>
+            <th>SKU</th>
+            <th>Name</th>
+            <th>Price</th>
+            <th>Status</th>
+            <th>Request Type</th>
+            <th colspan="2">Action</th>
+        </tr>
+        <?php if($products->count()): ?>
+            <?php foreach($products->getData() as $key=>$product): ?>
+                <?php $request = $this->getRequestById($product['entity_id']); ?>
+                <tr>
+                    <td><?php echo $product['sku']; ?></td>
+                    <td><?php echo $product['name']; ?></td>
+                    <td><?php echo $product['price']; ?></td>
+                    <td><?php echo $request['request_status']; ?></td>
+                    <td><?php echo $request['request_type']; ?></td>
+                    <td><a href="<?php echo $this->getUrl('*/*/edit',array('id'=>$product['entity_id'])); ?>">Edit</a></td>
+                    <td><a href="<?php echo $this->getUrl('*/*/delete',array('id'=>$product['entity_id'])); ?>">Delete</a></td>
+                </tr>
+            <?php endforeach; ?>
+        <?php else: ?>
+            <tr>
+                <td colspan="5">No Record Found</td>
+            </tr>
+        <?php endif; ?>
+    </table>
+</form>
