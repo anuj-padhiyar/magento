@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>	
+	<modules>
+		<Ccc_Shipping>
+			<version>0.0.1</version>
+		</Ccc_Shipping>
+	</modules>
+	<default>
+        <carriers>
+            <express>
+                <active>1</active>
+                <model>ccc_shipping/carrier_express</model>
+                <title>Express</title>
+                <price>5.00</price>
+                <specificerrmsg>This shipping method is currently unavailable. If you would like to order using this shipping method, please contact us.</specificerrmsg>
+            </express>
+        </carriers>
+	</default>
+	<global>
+		<helpers>
+			<shipping>
+				<class>Ccc_Shipping_Helper</class>
+			</shipping>
+		</helpers>
+		<models>
+			<ccc_shipping>
+				<class>Ccc_Shipping_Model</class>
+			</ccc_shipping>
+		</models>
+	</global>
+</config>
