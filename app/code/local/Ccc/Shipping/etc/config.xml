@@ -10,8 +10,9 @@
             <express>
                 <active>1</active>
                 <model>ccc_shipping/carrier_express</model>
-                <title>Express</title>
-                <price>5.00</price>
+                <title>Express Method</title>
+                <name>Express</name>
+                <price>100.00</price>
                 <specificerrmsg>This shipping method is currently unavailable. If you would like to order using this shipping method, please contact us.</specificerrmsg>
             </express>
         </carriers>

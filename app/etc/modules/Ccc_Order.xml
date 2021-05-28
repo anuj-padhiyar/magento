@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+    <modules>
+        <Ccc_Order>
+            <codePool>local</codePool>
+            <active>true</active>
+        </Ccc_Order>
+    </modules>
+</config>

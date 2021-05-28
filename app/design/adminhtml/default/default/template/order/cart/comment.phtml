@@ -1,0 +1,15 @@
+<div class="clear"></div>
+<div class="box-left entry-edit">
+    <div class="entry-edit-head">
+        <h4>Order History</h4>
+        <div class="form-buttons">
+            <button id="submit_order_top_button" type="button" onclick="changeAction('<?php echo $this->getCommentSaveUrl() ?>');" class="scalable save">
+                <span><span><span>Update</span></span></span>
+            </button>
+        </div>
+    </div>
+    <fieldset id="order-comment">
+        <label for="order-comment">Order Comments</label><br />
+        <textarea style="width:98%; height:8em;" id="order-comment" name="comment" rows="2" cols="15"><?php echo $this->getComment(); ?></textarea>
+    </fieldset>
+</div>

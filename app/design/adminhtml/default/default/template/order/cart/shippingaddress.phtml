@@ -1,0 +1,78 @@
+<?php $address = $this->getShippingAddress(); ?>
+
+<div id="order-shipping_address" class="box-right">
+    <div class="entry-edit">
+        <div class="entry-edit-head">
+            <h4 class="icon-head fieldset-legend head-shipping-address">Shipping Address</h4>
+            <div class="form-buttons">
+                <button id="submit_order_top_button" type="button" onclick="return validate('<?php echo $this->getShippingMethodUrl() ?>','s');" class="scalable save">
+                    <span><span><span>Update</span></span></span>
+                </button>
+            </div>
+        </div>
+        <fieldset class="np">
+            <div id="order-shipping_address_choice" class="order-choose-address">
+                <input type="checkbox" <?php if($address['same_as_billing']){echo "checked";} ?> id="sameAsBillingcheck" name="shipping[same_as_billing]" />
+                <label for="sameAsBilling" class="no-float">Same As Billing Address</label>
+            </div>
+            <div class="order-address" id="order-shipping_address_fields">
+                <div class="content">
+                    <div class="hor-scroll">
+                        <table id="shipping" cellspacing="0" class="form-list">
+                            <tbody>
+                                <tr>
+                                    <td class="label"><label for="first_name">First Name <span class="required">*</span></label></td>
+                                    <td class="value">
+                                        <input id="first_name" name="shipping[first_name]" value="<?php echo $this->getValue($address, 'first_name'); ?>" class="input-text required-entry" type="text" />
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="label"><label for="last_name">Last Name <span class="required">*</span></label></td>
+                                    <td class="value">
+                                        <input id="last_name" name="shipping[last_name]" value="<?php echo $this->getValue($address, 'last_name'); ?>" class="input-text required-entry" type="text" />
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="label"><label for="address">Street Address <span class="required">*</span></label></td>
+                                    <td class="value">
+                                        <input id="address" name="shipping[address]" value="<?php echo $this->getValue($address, 'address'); ?>" class="input-text required-entry" type="text" />
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="label"><label for="city">City <span class="required">*</span></label></td>
+                                    <td class="value">
+                                        <input id="city" name="shipping[city]" value="<?php echo $this->getValue($address, 'city'); ?>" class=" required-entry input-text" type="text" />
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="label"><label for="state">State/Province <span class="required">*</span></label></td>
+                                    <td class="value"><input id="state" name="shipping[state]" value="<?php echo $this->getValue($address, 'state'); ?>" class="input-text required-entry" type="text" /></td>
+                                </tr>
+                                <tr>
+                                    <td class="label"><label for="country">Country <span class="required">*</span></label></td>
+                                    <td class="value">
+                                        <select id="country" name="shipping[country]" class="required-entry required-entry select">
+                                            <?php foreach ($this->getCountryOptions() as $country) : ?>
+                                                <option value="<?php echo $country['value'] ?>" <?php if ($country['value'] == $this->getValue($address, 'country')){ echo "selected";} ?>><?php echo $country['label'] ?></option>
+                                            <?php endforeach; ?>
+                                        </select>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="label"><label for="zipcode">Zip/Postal Code <span class="required">*</span></label></td>
+                                    <td class="value">
+                                        <input id="zipcode" name="shipping[zipcode]" value="<?php echo $this->getValue($address, 'zipcode'); ?>" class=" required-entry input-text required-entry" type="text" />
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="order-save-in-address-book">
+                    <input name="shipping[save_to_address]" type="checkbox" id="shippingSaveToAddress" />
+                    <label for="saveToAddress">Save in address book</label>
+                </div>
+            </div>
+        </fieldset>
+    </div>
+</div>

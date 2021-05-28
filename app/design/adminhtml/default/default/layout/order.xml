@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<layout>
+    <order_adminhtml_order_index>
+        <reference name="content">
+            <block type="order/adminhtml_order" name="order_grid" />
+        </reference>
+    </order_adminhtml_order_index>
+
+    <order_adminhtml_order_showcustomer>
+        <reference name="content">
+            <block type="order/adminhtml_order_customer" name="customer_grid" />
+        </reference>
+    </order_adminhtml_order_showcustomer>
+
+    <order_adminhtml_order_grid>
+        <reference name="root">
+            <block type="order/adminhtml_order_cart" template="order/cart.phtml" name="content">
+                <block type="order/adminhtml_order_cart_billingAddress" template="order/cart/billingaddress.phtml" name="billing_address"></block>
+                <block type="order/adminhtml_order_cart_shippingAddress" template="order/cart/shippingaddress.phtml" name="shipping_address"></block>
+                <block type="order/adminhtml_order_cart_account" template="order/cart/account.phtml" name="account"></block>
+                <block type="order/adminhtml_order_cart_total" template="order/cart/total.phtml" name="total"></block>
+                <block type="order/adminhtml_order_cart_shippingMethod" template="order/cart/shippingmethod.phtml" name="shipping_method"></block>
+                <block type="order/adminhtml_order_cart_paymentMethod" template="order/cart/paymentmethod.phtml" name="payment_method"></block>
+                <block type="order/adminhtml_order_cart_item" template="order/cart/item.phtml" name="item"></block>
+                <block type="order/adminhtml_order_cart_comment" template="order/cart/comment.phtml" name="comment"></block>
+                <block type="order/adminhtml_order_cart_product" name="product"></block>
+            </block>
+        </reference>
+    </order_adminhtml_order_grid>
+</layout>
