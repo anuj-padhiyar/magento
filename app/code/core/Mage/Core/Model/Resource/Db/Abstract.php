@@ -451,14 +451,13 @@ abstract class Mage_Core_Model_Resource_Db_Abstract extends Mage_Core_Model_Reso
                 unset($bind[$this->getIdFieldName()]);
             }
             $this->_getWriteAdapter()->insert($this->getMainTable(), $bind);
-
             $object->setId($this->_getWriteAdapter()->lastInsertId($this->getMainTable()));
-
+            
             if ($this->_useIsObjectNew) {
                 $object->isObjectNew(false);
             }
         }
-
+        
         $this->unserializeFields($object);
         $this->_afterSave($object);
 
