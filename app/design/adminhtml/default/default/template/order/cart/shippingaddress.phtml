@@ -1,5 +1,4 @@
 <?php $address = $this->getShippingAddress(); ?>
-
 <div id="order-shipping_address" class="box-right">
     <div class="entry-edit">
         <div class="entry-edit-head">
@@ -23,37 +22,37 @@
                                 <tr>
                                     <td class="label"><label for="first_name">First Name <span class="required">*</span></label></td>
                                     <td class="value">
-                                        <input id="first_name" name="shipping[first_name]" value="<?php echo $this->getValue($address, 'first_name'); ?>" class="input-text required-entry" type="text" />
+                                        <input id="first_name" name="shipping[first_name]" value="<?php echo $address->getFirstName(); ?>" class="input-text required-entry" type="text" />
                                     </td>
                                 </tr>
                                 <tr>
                                     <td class="label"><label for="last_name">Last Name <span class="required">*</span></label></td>
                                     <td class="value">
-                                        <input id="last_name" name="shipping[last_name]" value="<?php echo $this->getValue($address, 'last_name'); ?>" class="input-text required-entry" type="text" />
+                                        <input id="last_name" name="shipping[last_name]" value="<?php echo $address->getLastName(); ?>" class="input-text required-entry" type="text" />
                                     </td>
                                 </tr>
                                 <tr>
                                     <td class="label"><label for="address">Street Address <span class="required">*</span></label></td>
                                     <td class="value">
-                                        <input id="address" name="shipping[address]" value="<?php echo $this->getValue($address, 'address'); ?>" class="input-text required-entry" type="text" />
+                                        <input id="address" name="shipping[address]" value="<?php echo $address->getAddress(); ?>" class="input-text required-entry" type="text" />
                                     </td>
                                 </tr>
                                 <tr>
                                     <td class="label"><label for="city">City <span class="required">*</span></label></td>
                                     <td class="value">
-                                        <input id="city" name="shipping[city]" value="<?php echo $this->getValue($address, 'city'); ?>" class=" required-entry input-text" type="text" />
+                                        <input id="city" name="shipping[city]" value="<?php echo $address->getCity(); ?>" class=" required-entry input-text" type="text" />
                                     </td>
                                 </tr>
                                 <tr>
                                     <td class="label"><label for="state">State/Province <span class="required">*</span></label></td>
-                                    <td class="value"><input id="state" name="shipping[state]" value="<?php echo $this->getValue($address, 'state'); ?>" class="input-text required-entry" type="text" /></td>
+                                    <td class="value"><input id="state" name="shipping[state]" value="<?php echo $address->getState(); ?>" class="input-text required-entry" type="text" /></td>
                                 </tr>
                                 <tr>
                                     <td class="label"><label for="country">Country <span class="required">*</span></label></td>
                                     <td class="value">
                                         <select id="country" name="shipping[country]" class="required-entry required-entry select">
                                             <?php foreach ($this->getCountryOptions() as $country) : ?>
-                                                <option value="<?php echo $country['value'] ?>" <?php if ($country['value'] == $this->getValue($address, 'country')){ echo "selected";} ?>><?php echo $country['label'] ?></option>
+                                                <option value="<?php echo $country['value'] ?>" <?php if ($country['value'] == $address->getCountry()){ echo "selected";} ?>><?php echo $country['label'] ?></option>
                                             <?php endforeach; ?>
                                         </select>
                                     </td>
@@ -61,7 +60,7 @@
                                 <tr>
                                     <td class="label"><label for="zipcode">Zip/Postal Code <span class="required">*</span></label></td>
                                     <td class="value">
-                                        <input id="zipcode" name="shipping[zipcode]" value="<?php echo $this->getValue($address, 'zipcode'); ?>" class=" required-entry input-text required-entry" type="text" />
+                                        <input id="zipcode" name="shipping[zipcode]" value="<?php echo $address->getZipcode(); ?>" class=" required-entry input-text required-entry" type="text" />
                                     </td>
                                 </tr>
                             </tbody>

@@ -39,7 +39,7 @@ class Ccc_Order_Block_Adminhtml_Order_Cart_Product_Grid extends Mage_Adminhtml_B
 
         $this->getMassactionBlock()->addItem('add_to_cart', array(
              'label'=> Mage::helper('order')->__('Add To Cart'),
-             'url'  => $this->getUrl('*/adminhtml_order/addProduct',array('_current'=>true)),
+             'url'  => $this->getUrl('*/adminhtml_order/addProduct'),
              'confirm' => Mage::helper('order')->__('Are you sure?')
         ));
         return $this;

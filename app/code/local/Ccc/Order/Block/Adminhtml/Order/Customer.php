@@ -5,7 +5,7 @@ class Ccc_Order_Block_Adminhtml_Order_Customer extends Mage_Adminhtml_Block_Widg
         parent::__construct();
         $this->_controller = 'adminhtml_order_customer';
         $this->_blockGroup = 'order';
-        $this->_headerText = Mage::helper('sales')->__('Create New Order');
+        $this->_headerText = Mage::helper('order')->__('Create New Order');
         $this->_removeButton('add');
         $this->addButton ('back', [
             'label' =>  'Back',

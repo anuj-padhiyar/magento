@@ -535,7 +535,8 @@ class Mage_Customer_AccountController extends Mage_Core_Controller_Front_Action
      * @param string $path
      * @return mixed
      */
-    protected function _getFromRegistry($path){
+    protected function _getFromRegistry($path)
+    {
         return Mage::registry($path);
     }
 
@@ -952,9 +953,9 @@ class Mage_Customer_AccountController extends Mage_Core_Controller_Front_Action
             $customerForm = $this->_getModel('customer/form');
             $customerForm->setFormCode('customer_account_edit')
                 ->setEntity($customer);
-                
+
             $customerData = $customerForm->extractData($this->getRequest());
-            
+
             $errors = array();
             $customerErrors = $customerForm->validateData($customerData);
             if ($customerErrors !== true) {

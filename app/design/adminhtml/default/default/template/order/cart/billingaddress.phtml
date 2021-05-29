@@ -1,5 +1,4 @@
 <?php $address = $this->getBillingAddress(); ?>
-<?php ?>
 
 <div id="order-addresses">
     <div id="order-billing_address" class="box-left">
@@ -19,52 +18,34 @@
                         <div class="hor-scroll">
                             <table id="billing" cellspacing="0" class="form-list">
                                 <tbody>
-                                    <!-- <tr>
-                                        <td class="label"><label for="order-billing_address_firstname">First Name <span class="required">*</span></label></td>
-                                        <td class="value">
-                                            <input id="order-billing_address_firstname" name="billing[]" value="" class=" required-entry input-text required-entry" type="text" />
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td class="label"><label for="order-billing_address_middlename">Middle Name/Initial</label></td>
-                                        <td class="value">
-                                            <input id="order-billing_address_middlename" name="order[billing_address][middlename]" value="" class=" input-text" type="text" />
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td class="label"><label for="order-billing_address_lastname">Last Name <span class="required">*</span></label></td>
-                                        <td class="value">
-                                            <input id="order-billing_address_lastname" name="order[billing_address][lastname]" value="" class=" required-entry input-text required-entry" type="text" />
-                                        </td>
-                                    </tr> -->
                                     <tr>
                                         <td class="label"><label for="first_name">First Name <span class="required">*</span></label></td>
                                         <td class="value">
-                                            <input id="first_name" name="billing[first_name]" value="<?php echo $this->getValue($address, 'first_name'); ?>" class="input-text required-entry" type="text" />
+                                            <input id="first_name" name="billing[first_name]" value="<?php echo $address->getFirstName(); ?>" class="input-text required-entry" type="text" />
                                         </td>
                                     </tr>
                                     <tr>
                                         <td class="label"><label for="last_name">Last Name <span class="required">*</span></label></td>
                                         <td class="value">
-                                            <input id="last_name" name="billing[last_name]" value="<?php echo $this->getValue($address, 'last_name'); ?>" class="input-text required-entry" type="text" />
+                                            <input id="last_name" name="billing[last_name]" value="<?php echo $address->getLastName(); ?>" class="input-text required-entry" type="text" />
                                         </td>
                                     </tr>
                                     <tr>
                                         <td class="label"><label for="address">Street Address <span class="required">*</span></label></td>
                                         <td class="value">
-                                            <input id="address" name="billing[address]" value="<?php echo $this->getValue($address, 'address'); ?>" class="input-text required-entry" type="text" />
+                                            <input id="address" name="billing[address]" value="<?php echo $address->getAddress(); ?>" class="input-text required-entry" type="text" />
                                         </td>
                                     </tr>
                                     <tr>
                                         <td class="label"><label for="city">City <span class="required">*</span></label></td>
                                         <td class="value">
-                                            <input id="city" name="billing[city]" value="<?php echo $this->getValue($address, 'city'); ?>" class=" required-entry input-text required-entry" type="text" />
+                                            <input id="city" name="billing[city]" value="<?php echo $address->getCity(); ?>" class=" required-entry input-text required-entry" type="text" />
                                         </td>
                                     </tr>
                                     <tr>
                                         <td class="label"><label for="state">State/Province <span class="required">*</span></label></td>
                                         <td class="value">
-                                            <input id="state" name="billing[state]" value="<?php echo $this->getValue($address, 'state'); ?>" class="input-text" type="text" />
+                                            <input id="state" name="billing[state]" value="<?php echo $address->getState(); ?>" class="input-text" type="text" />
                                         </td>
                                     </tr>
                                     <tr>
@@ -72,7 +53,7 @@
                                         <td class="value">
                                         <select id="country" name="billing[country]" class="required-entry required-entry select">
                                             <?php foreach ($this->getCountryOptions() as $country) : ?>
-                                                <option value="<?php echo $country['value'] ?>" <?php if ($country['value'] == $this->getValue($address, 'country')){ echo "selected";} ?>><?php echo $country['label'] ?></option>
+                                                <option value="<?php echo $country['value'] ?>" <?php if ($country['value'] == $address->getCountry()){ echo "selected";} ?>><?php echo $country['label'] ?></option>
                                             <?php endforeach; ?>
                                         </select>
                                         </td>
@@ -80,7 +61,7 @@
                                     <tr>
                                         <td class="label"><label for="zipcode">Zip/Postal Code <span class="required">*</span></label></td>
                                         <td class="value">
-                                            <input id="zipcode" name="billing[zipcode]" value="<?php echo $this->getValue($address, 'zipcode'); ?>" class=" required-entry input-text required-entry" type="text" />
+                                            <input id="zipcode" name="billing[zipcode]" value="<?php echo $address->getZipcode(); ?>" class=" required-entry input-text required-entry" type="text" />
                                         </td>
                                     </tr>
                                 </tbody>

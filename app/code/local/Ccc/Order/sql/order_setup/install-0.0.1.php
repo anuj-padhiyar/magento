@@ -371,13 +371,6 @@ $table = $this->getConnection()->newTable($this->getTable('order/order_address')
         'Order Id'
     )
     ->addColumn(
-        'address_id',
-        Varien_Db_Ddl_Table::TYPE_INTEGER,
-        10,
-        array('nullable' => true , 'default' => null),
-        'Address Id'
-    )
-    ->addColumn(
         'address_type',
         Varien_Db_Ddl_Table::TYPE_VARCHAR,
         32,

@@ -7,29 +7,20 @@ class Ccc_Order_Block_Adminhtml_Order_Cart_ShippingAddress extends Ccc_Order_Blo
 
     public function getShippingAddress(){
         $cart = $this->getCart();
-        if($address = $cart->getCartShippingAddress()){
+        if($cart->getCartShippingAddress()->getId()){
+            return $cart->getCartShippingAddress();
+        }
+        if($cart->getCustomer()->getCustomerShippingAddress()->getId()){
+            $address = $cart->getCustomer()->getCustomerShippingAddress();
+            $address->setCountry($address->getCountryId());
+            $address->setAddress($address->getStreet());
+            $address->setState($address->getRegion());
+            $address->setZipcode($address->getPostcode());
+            $address->setFirstName($address->getFirstname());
+            $address->setLastName($address->getLastname());
             return $address;
         }
-        if($address = $this->getCustomerShippingAddress()){
-            $address['country'] = $address['country_id'];
-            $address['address'] = $address['street'];
-            $address['state'] = $address['region'];
-            $address['zipcode'] = $address['postcode'];
-            $address['first_name'] = $address['firstname'];
-            $address['last_name'] = $address['lastname'];
-            return $address;
-        }
-        return null;
-    }
-
-    public function getCustomerShippingAddress(){
-        $customerId = $this->getRequest()->getParam('id');
-        $customer = Mage::getModel('customer/customer')->load($customerId);
-        $address = $customer->getDefaultShippingAddress();
-        if($address){
-            return $address->getData();
-        }
-        return false;
+        return Mage::getModel('order/cart_address');
     }
 
     public function getValue($address, $value){

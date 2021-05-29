@@ -11,7 +11,7 @@ class Ccc_Order_Block_Adminhtml_Order_Cart_ShippingMethod extends Ccc_Order_Bloc
     }
 
     public function getShippingMethodUrl(){
-        return $this->getUrl('*/adminhtml_order/shippingMethod',array('_current'=>true));
+        return $this->getUrl('*/adminhtml_order/shippingMethod');
     }
 
     public function fetchShippingMethod(){

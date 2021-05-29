@@ -31,10 +31,21 @@
 
 
 <script type="text/javascript">
-    document.getElementById('products').style.display = "none";
+    // if(!localStorage.getItem('active')){
+    //     localStorage.setItem("active", 0);
+    // }
+    // if(localStorage.getItem('active') == 0){
+        document.getElementById('products').style.display = "none";
+    // }
     function showProduct() {
         document.getElementById('products').style.display = "block";
+        localStorage.setItem('active',1);
     }
+    // function hideProduct(url) {
+    //     console.log(url);
+    //     localStorage.setItem('active',0);
+    //     // changeAction(url);
+    // }
 
     function changeAction(value) {
         form = document.getElementById('grid');
@@ -50,7 +61,7 @@
             if(method == 's' || method==''){
                 for(i=0;i<7;i++){
                     if(tbodys.children[i].children[1].children[0].value == ''){
-                        alert("Please Fill All The Field");
+                        alert("Please Fill All The Field of Shipping Address");
                         return false;
                     }
                 }
@@ -59,7 +70,7 @@
         if(method == 'b' || method==''){
             for(i=0;i<7;i++){
                 if(tbodyb.children[i].children[1].children[0].value == ''){
-                    alert("Please Fill All The Field Of Address");
+                    alert("Please Fill All The Field Of Billing Address");
                     return false;
                 }
             }

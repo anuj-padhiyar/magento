@@ -13,8 +13,8 @@ class Ccc_Order_Block_Adminhtml_Order_Cart_Account extends Ccc_Order_Block_Admin
         return $this->customer;
     }
     public function setCustomer(){
-        $this->customer = Mage::getModel('customer/customer')
-                                ->load($this->getRequest()->getParam('id'));
+        $id = $this->getCart()->getCustomerId();
+        $this->customer = Mage::getModel('customer/customer')->load($id);
         return $this;
     }
 

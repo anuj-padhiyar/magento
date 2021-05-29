@@ -1,6 +1,7 @@
 <?php
 
 class Ccc_Order_Block_Adminhtml_Order_Cart extends Mage_Core_Block_Template{
+    protected $cart = null;
     public function __construct(){
         parent::__construct();
     }
@@ -14,7 +15,14 @@ class Ccc_Order_Block_Adminhtml_Order_Cart extends Mage_Core_Block_Template{
     }
 
     public function getCart(){
-        return Mage::registry('cart');
+        if(!$this->cart){
+            $this->setCart();
+        }
+        return $this->cart; 
+    }
+    public function setCart(){
+        $this->cart = Mage::registry('cart');
+        return $this;
     }
     
 }

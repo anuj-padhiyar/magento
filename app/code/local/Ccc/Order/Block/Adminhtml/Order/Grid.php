@@ -3,25 +3,12 @@
 class Ccc_Order_Block_Adminhtml_Order_Grid extends Mage_Adminhtml_Block_Widget_Grid
 {
 
-    public function __construct()
-    {
+    public function __construct(){
         parent::__construct();
-        // $this->setId('sales_order_grid');
-        // $this->setUseAjax(true);
-        // $this->setDefaultSort('created_at');
-        // $this->setDefaultDir('DESC');
-        // $this->setSaveParametersInSession(true);
     }
 
-    protected function _prepareCollection()
-    {
-        // $collection = Mage::getResourceModel($this->_getCollectionClass());
+    protected function _prepareCollection(){
         $collection = Mage::getModel('order/order')->getCollection();
-        // $select = $collection->getSelect()->join(['order_address'=>'order_address'],
-        //                 'order_address.order_id = e.order_id');
-        // echo "<pre>";
-        // print_r($collection->getData());
-        // die;
         $this->setCollection($collection);
         return parent::_prepareCollection();
     }
