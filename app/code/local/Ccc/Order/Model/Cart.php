@@ -64,7 +64,7 @@ class Ccc_Order_Model_Cart extends Mage_Core_Model_Abstract{
 
     public function setSubtotal(){
         $items = $this->getItems();
-        $this->subTotal = 0;
+        $this->subtotal =0;
         foreach($items as $key=>$item){
             $this->subtotal += $item->getTotalByQuantityPrice();
         }
@@ -76,8 +76,6 @@ class Ccc_Order_Model_Cart extends Mage_Core_Model_Abstract{
         }
         return $this->subtotal;
     }
-    
-
     
     public function setFinalTotal(){
         $this->finalTotal = $this->getSubTotal() + $this->getShippingAmount();

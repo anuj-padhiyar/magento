@@ -10,10 +10,12 @@ class Ccc_Order_Block_Adminhtml_Order_Cart_Total extends Ccc_Order_Block_Adminht
     }
 
     public function getShippingAmount(){
-        if($amount = $this->getCart()->getShippingAmount()){
-            return $amount;
-        }
-        return 0;
+        return $this->getCart()->getShippingAmount();
+        // die;
+        // if($amount = $this->getCart()->getShippingAmount()){
+        //     return $amount;
+        // }
+        // return 0;
     }
 
     public function getFinalTotal(){
