@@ -202,7 +202,7 @@ class Ccc_Order_Adminhtml_OrderController extends Mage_Adminhtml_Controller_Acti
                 $model->setFirstName($billingAddress->getFirstName());
                 $model->setLastName($billingAddress->getLastName());
             }else{
-                $model->setData($billingAddress);
+                $model->setData($billingAddress->getData());
                 $model->setAddressType('shipping');
                 unset($model['address_id']);
             }
