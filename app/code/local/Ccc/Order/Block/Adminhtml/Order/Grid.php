@@ -185,13 +185,10 @@ class Ccc_Order_Block_Adminhtml_Order_Grid extends Mage_Adminhtml_Block_Widget_G
     //     return $this;
     // }
 
-    // public function getRowUrl($row)
-    // {
-    //     if (Mage::getSingleton('admin/session')->isAllowed('sales/order/actions/view')) {
-    //         return $this->getUrl('*/sales_order/view', array('order_id' => $row->getId()));
-    //     }
-    //     return false;
-    // }
+    public function getRowUrl($row)
+    {
+        return $this->getUrl('*/*/showOrder',['id'=>$row->getId()]);
+    }
 
     // public function getGridUrl()
     // {

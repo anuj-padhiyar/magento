@@ -1,0 +1,308 @@
+<?php $order = $this->getOrder(); ?>
+<?php $items = $order->getItems(); ?>
+<?php $billingAddress = $order->getBillingAddress(); ?>
+<?php $shippingAddress = $order->getShippingAddress(); ?>
+<?php $customer = $order->getCustomer(); ?>
+<?php $status = $this->getStatus(); ?>
+<?php $orderStatus = $order->getStatus(); ?>
+<?php $currentStatus = $order->getLastStatus(); ?>
+
+<div id="contentHtml">
+    <div class="middle" id="anchor-content">
+        <div id="page:main-container">
+            <form action="<?php echo $this->getUrl('*/*/'); ?>" method="POST">
+                <?php echo $this->getBlockHtml('formkey'); ?>
+                <button style="float:right" type="submit">Back To Orders</button>
+            </form>
+            <h3>Order View</h3>
+            <ul id="sales_order_view_tabs">
+                <li>
+                    <div>
+                        <div class="box-left">
+                            <!--Order Information-->
+                            <div class="entry-edit">
+                                <div class="entry-edit-head">
+                                    <h4 class="icon-head head-account">Order # <?php echo $order->getOrderId(); ?> (the order confirmation email was sent)</h4>
+                                </div>
+                                <div class="fieldset">
+                                    <table cellspacing="0" class="form-list">
+                                        <tr>
+                                            <td class="label"><label>Order Date</label></td>
+                                            <td class="value"><strong><?php echo $order->getCreatedDate(); ?></strong></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="label"><label>Order Status</label></td>
+                                            <td class="value"><strong><span id="order_status">Processing</span></strong></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="label"><label>Purchased From</label></td>
+                                            <td class="value"><strong>Main Website<br />Main Website Store<br />Default Store View</strong></td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="box-right">
+                            <!--Account Information-->
+                            <div class="entry-edit">
+                                <div class="entry-edit-head">
+                                    <h4 class="icon-head head-account">Account Information</h4>
+                                    <div class="tools"></div>
+                                </div>
+                                <div class="fieldset">
+                                    <div class="hor-scroll">
+                                        <table cellspacing="0" class="form-list">
+                                            <tr>
+                                                <td class="label"><label>Customer Name</label></td>
+                                                <td class="value">
+                                                    <strong><?php echo $customer->getName(); ?></strong>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="label"><label>Email</label></td>
+                                                <td class="value"><strong><?php echo $customer->getEmail(); ?></strong></td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="clear"></div>
+
+                        <div class="box-left">
+                            <!--Billing Address-->
+                            <div class="entry-edit">
+                                <div class="entry-edit-head">
+                                    <h4 class="icon-head head-billing-address">Billing Address</h4>
+                                </div>
+                                <fieldset>
+                                    <address>
+                                        <?php echo $billingAddress->getFirstName() . ' ' . $billingAddress->getLastName(); ?><br />
+                                        <?php echo $billingAddress->getAddress(); ?><br />
+                                        <?php echo $billingAddress->getCity() . ', ' . $billingAddress->getState() . ', ' . $billingAddress->getZipcode(); ?><br />
+                                        <?php echo $this->getCountry($billingAddress->getCountry()); ?><br />
+                                    </address>
+                                </fieldset>
+                            </div>
+                        </div>
+                        <div class="box-right">
+                            <!--Shipping Address-->
+                            <div class="entry-edit">
+                                <div class="entry-edit-head">
+                                    <h4 class="icon-head head-shipping-address">Shipping Address</h4>
+                                </div>
+                                <fieldset>
+                                    <address>
+                                        <?php echo $shippingAddress->getFirstName() . ' ' . $shippingAddress->getLastName(); ?><br />
+                                        <?php echo $shippingAddress->getAddress(); ?><br />
+                                        <?php echo $shippingAddress->getCity() . ', ' . $shippingAddress->getState() . ', ' . $shippingAddress->getZipcode(); ?><br />
+                                        <?php echo $this->getCountry($shippingAddress->getCountry()); ?><br />
+                                    </address>
+                                </fieldset>
+                            </div>
+                        </div>
+                        <div class="clear"></div>
+                        <input type="hidden" name="order_id" value="1" />
+                        <div class="box-left">
+                            <!--Payment Method-->
+                            <div class="entry-edit">
+                                <div class="entry-edit-head">
+                                    <h4 class="icon-head head-payment-method">Payment Information</h4>
+                                </div>
+                                <fieldset>
+                                    <?php echo $order->getPaymentMethodCode(); ?>
+                                </fieldset>
+                            </div>
+                        </div>
+                        <div class="box-right">
+                            <!--Shipping Method-->
+                            <div class="entry-edit">
+                                <div class="entry-edit-head">
+                                    <h4 class="icon-head head-shipping-method">Shipping &amp; Handling Information</h4>
+                                </div>
+                                <fieldset>
+                                    <strong><?php echo $order->getShippingMethodCode(); ?></strong>
+                                    <span class="price">$ <?php echo $order->getShippingAmount(); ?></span>
+                                </fieldset>
+                            </div>
+                        </div>
+                        <div class="clear"></div>
+                        <div class="box-left">
+                            <div class="entry-edit">
+                                <div class="entry-edit-head">
+                                    <h4 class="icon-head head-billing-address">Status</h4>
+                                    <button style="float:right" onclick="mage.setForm('status');" class="scalable save">Submit</button>
+                                </div>
+                                <form id="status" action="<?php echo $this->getUrl('*/*/changeStatus', ['_current' => true]); ?>" method="POST">
+                                    <?php echo $this->getBlockHtml('formkey'); ?>
+                                    <fieldset>
+                                        <div id="status_history">
+                                            <span>
+                                                <label>Status</label>&nbsp;
+                                                <select name="history[status]">
+                                                    <?php foreach ($status as $value => $sort) : ?>
+                                                        <?php if ($status[$currentStatus->getStatus()] <= $sort && $status[$currentStatus->getStatus()] != 3) : ?>
+                                                            <option <?php if($currentStatus->getStatus() == $value){echo "selected";} ?> name="<?php echo $value; ?>"><?php echo $value; ?></option>
+                                                        <?php endif; ?>
+                                                    <?php endforeach; ?>
+                                                </select>
+                                            </span>
+
+                                            <div id="history_form" class="order-history-form">
+                                                <span class="field-row">
+                                                    <label class="normal" for="history_comment">Comment</label>
+                                                    <textarea name="history[comment]" rows="3" cols="5" style="height:6em; width:99%;" id="history_comment"><?php echo $currentStatus->getComment(); ?></textarea>
+                                                </span>
+                                                <div class="clear"></div>
+                                            </div>
+                                        </div>
+                                    </fieldset>
+                                </form>
+                            </div>
+                        </div>
+                        <div class="box-right">
+                            <!--Shipping Address-->
+                            <div class="entry-edit">
+                                <div class="entry-edit-head">
+                                    <h4 class="icon-head head-shipping-address">Status And Comment History</h4>
+                                </div>
+                                <div class="fieldset">
+                                    <table width="100%">
+                                        <tr>
+                                            <th>Order Status</th>
+                                            <th>Comment</th>
+                                            <th>Date</th>
+                                        </tr>
+                                        <?php foreach ($orderStatus as $key => $value) : ?>
+                                            <tr>
+                                                <td class="value"><?php echo $value->getStatus(); ?></td>
+                                                <td class="value"><?php echo $value->getComment(); ?></td>
+                                                <td class="value"><?php echo $value->getDate(); ?></td>
+                                            </tr>
+                                        <?php endforeach; ?>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="clear"></div>
+                        <div class="clear"></div>
+                        <div class="entry-edit">
+                            <div class="entry-edit-head">
+                                <h4 class="icon-head head-products">Items Ordered</h4>
+                            </div>
+                        </div>
+                        <div class="grid np">
+                            <div class="hor-scroll">
+                                <table cellspacing="0" class="data order-tables">
+                                    <col />
+                                    <col width="1" />
+                                    <col width="1" />
+                                    <col width="1" />
+                                    <col width="1" />
+                                    <col width="1" />
+                                    <col width="1" />
+                                    <col width="1" />
+                                    <col width="1" />
+                                    <col width="1" />
+                                    <thead>
+                                        <tr class="headings">
+                                            <th>Product</th>
+                                            <th><span class="nobr">Item Status</span></th>
+                                            <th>Price</th>
+                                            <th class="a-center">Qty</th>
+                                            <th class="last"><span class="nobr">Row Total</span></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="even">
+                                        <?php foreach ($items as $key => $item) : ?>
+                                            <tr class="border">
+                                                <td>
+                                                    <div id="order_item_1" class="item-container">
+                                                        <div class="item-text">
+
+                                                            <h5 class="title"><span id="order_item_1_title"><?php echo $item->getProduct()->getName(); ?></span></h5>
+                                                            <div><strong>SKU:</strong><?php echo $item->getProduct()->getSku(); ?></div>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td class="a-center">Ordered</td>
+                                                <td class="a-right"><span class="price">$ <?php echo $item->getBasePrice(); ?></span></td>
+                                                <td>
+                                                    <table cellspacing="0" class="qty-table">
+                                                        <tr>
+                                                            <td><strong><?php echo $item->getQuantity(); ?></strong></td>
+                                                        </tr>
+                                                    </table>
+                                                </td>
+                                                <td class="a-right"><span class="price">$<?php echo $item->getPrice(); ?></span></td>
+                                            </tr>
+                                        <?php endforeach; ?>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <br />
+                        <div class="clear"></div>
+
+                        <div class="box-left">
+                            <div class="entry-edit">
+                                <div class="entry-edit-head">
+                                    <h4>Order Comment</h4>
+                                </div>
+                                <fieldset>
+                                    <div id="order_history_block">
+                                        <div id="history_form" class="order-history-form">
+                                            <span class="field-row">
+                                                <label class="normal" for="history_comment">Order Comment</label>
+                                                <textarea name="history[comment]" disabled rows="3" cols="5" style="height:6em; width:99%;" id="history_comment"><?php echo $order->getComment(); ?></textarea>
+                                            </span>
+                                            <div class="clear"></div>
+                                        </div>
+                                    </div>
+                                </fieldset>
+                            </div>
+                        </div>
+                        <div class="box-right entry-edit">
+                            <div class="entry-edit-head">
+                                <h4>Order Totals</h4>
+                            </div>
+                            <div class="order-totals">
+                                <table cellspacing="0" width="100%">
+                                    <col />
+                                    <col width="1" />
+                                    <tfoot>
+                                        <tr class="0">
+                                            <td class="label">
+                                                <strong>Sub Total</strong>
+                                            </td>
+                                            <td class="emph">
+                                                <strong><span class="price">$ <?php echo $order->getSubTotal(); ?></span></strong>
+                                            </td>
+                                        </tr>
+                                        <tr class="1">
+                                            <td class="label">
+                                                <strong>Shipping Amount</strong>
+                                            </td>
+                                            <td class="emph">
+                                                <strong><span class="price">$ <?php echo $order->getShippingAmount(); ?></span></strong>
+                                            </td>
+                                        </tr>
+                                        <tr class="2">
+                                            <td class="label">
+                                                <strong>Grand Total</strong>
+                                            </td>
+                                            <td class="emph">
+                                                <strong><span class="price">$ <?php echo $order->getTotal(); ?></span></strong>
+                                            </td>
+                                        </tr>
+                                    </tfoot>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="clear"></div>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>

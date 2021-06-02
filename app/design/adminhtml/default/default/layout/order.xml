@@ -1,18 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <layout>
-    <order_adminhtml_order_index>
+    <adminhtml_order_index>
         <reference name="content">
             <block type="order/adminhtml_order" name="order_grid" />
         </reference>
-    </order_adminhtml_order_index>
+    </adminhtml_order_index>
 
-    <order_adminhtml_order_showcustomer>
+    <adminhtml_order_showcustomer>
         <reference name="content">
             <block type="order/adminhtml_order_customer" name="customer_grid" />
         </reference>
-    </order_adminhtml_order_showcustomer>
+    </adminhtml_order_showcustomer>
 
-    <order_adminhtml_order_grid>
+    <adminhtml_order_grid>
+        <reference name="head">
+            <action method="addItem"><type>js</type><name>ajax/jquery.js</name></action>
+            <action method="addItem"><type>js</type><name>ajax/noconflict.js</name></action>
+            <action method="addItem"><type>js</type><name>ajax/mage.js</name></action>
+        </reference>
         <reference name="root">
             <block type="order/adminhtml_order_cart" template="order/cart.phtml" name="content">
                 <block type="order/adminhtml_order_cart_billingAddress" template="order/cart/billingaddress.phtml" name="billing_address"></block>
@@ -26,5 +31,16 @@
                 <block type="order/adminhtml_order_cart_product" name="product"></block>
             </block>
         </reference>
-    </order_adminhtml_order_grid>
+    </adminhtml_order_grid>
+
+    <adminhtml_order_showorder>
+        <reference name="head">
+            <action method="addItem"><type>js</type><name>ajax/jquery.js</name></action>
+            <action method="addItem"><type>js</type><name>ajax/noconflict.js</name></action>
+            <action method="addItem"><type>js</type><name>ajax/mage.js</name></action>
+        </reference>
+        <reference name="content">
+            <block type="order/adminhtml_placeOrder" template="order/placeOrder.phtml" name="placeorder" />
+        </reference>
+    </adminhtml_order_showorder>
 </layout>

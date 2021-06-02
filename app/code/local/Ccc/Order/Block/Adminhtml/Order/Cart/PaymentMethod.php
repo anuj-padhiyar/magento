@@ -11,7 +11,7 @@ class Ccc_Order_Block_Adminhtml_Order_Cart_PaymentMethod extends Ccc_Order_Block
     }
 
     public function getPaymnetMethodUrl(){
-        return $this->getUrl('*/adminhtml_order/paymantMethod',array('_current'=>true));
+        return $this->getUrl('*/*/paymantMethod',array('_current'=>true));
     }
 
     public function fetchPaymentMethod(){

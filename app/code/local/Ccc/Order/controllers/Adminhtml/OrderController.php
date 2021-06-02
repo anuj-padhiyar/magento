@@ -7,6 +7,7 @@ class Ccc_Order_Adminhtml_OrderController extends Mage_Adminhtml_Controller_Acti
         $this->_title($this->__('Sales'))->_title($this->__('Orders'));
         $this->_setActiveMenu('order');
         $this->renderLayout();
+        // echo Zend_Debug::dump($this->getLayout()->getUpdate()->getHandles());
     }
 
     public function showCustomerAction(){
@@ -17,11 +18,36 @@ class Ccc_Order_Adminhtml_OrderController extends Mage_Adminhtml_Controller_Acti
         // echo Zend_Debug::dump($this->getLayout()->getUpdate()->getHandles());
     }
 
-    public function gridAction(){
+    protected function makeResponse($block,$message = null){
+        $response = [
+            'status' => 'success',
+            'message' =>'this is grid action.',
+            'element' =>[
+                [
+                    'selector' =>'#contentHtml',
+                    'html' =>$block
+                ],
+                [
+                    'selector' =>'#messages',
+                    'html' =>$message
+                ]
+            ]
+        ];
+		header("Content-Type: application/json");
+		echo json_encode($response);
+	}
+
+     public function gridAction(){
         $this->loadLayout();
         Mage::register('cart',$this->getCart());
         $this->_setActiveMenu('order');
-        $this->renderLayout();
+        if($this->getRequest()->getParam('id')){
+            $this->renderLayout();
+            return;
+        }
+        $block = $this->getLayout()->getBlock('content')->toHtml();
+        $message = $this->getLayout()->getBlock('messages')->toHtml();
+        $this->makeResponse($block,$message);
     }
 
     protected function getCart(){
@@ -61,7 +87,7 @@ class Ccc_Order_Adminhtml_OrderController extends Mage_Adminhtml_Controller_Acti
         $itemIds = $cart->getItemIds();
         if(!$products){
             Mage::getSingleton('adminhtml/session')->addError('No Product is Selected');
-            $this->_redirect('*/adminhtml_order/grid');
+            $this->_redirect('*/*/grid');
             return;
         }
         foreach($products as $key=>$id){
@@ -82,8 +108,9 @@ class Ccc_Order_Adminhtml_OrderController extends Mage_Adminhtml_Controller_Acti
             }
             $cartItem->save();
         }
+        $this->_getSession()->setData('show',0);
         Mage::getSingleton('adminhtml/session')->addSuccess('Product is Added Successfully');
-        $this->_redirect('*/adminhtml_order/grid');
+        $this->_redirect('*/*/grid',['id'=>$cart->getCustomerId()]);
     }
 
     public function changeQuantityAction(){
@@ -97,7 +124,7 @@ class Ccc_Order_Adminhtml_OrderController extends Mage_Adminhtml_Controller_Acti
             $model = Mage::getModel('order/cart_item')->load($itemId);
             if(!is_numeric($quantity) || $quantity<0){
                 Mage::getSingleton('adminhtml/session')->addError('Please Enter Valid Number For Quantity!');
-                $this->_redirect('*/adminhtml_order/grid');
+                $this->_redirect('*/*/grid');
                 return;
             }
             if($quantity==0){
@@ -110,7 +137,7 @@ class Ccc_Order_Adminhtml_OrderController extends Mage_Adminhtml_Controller_Acti
             $model->save();
         }
         Mage::getSingleton('adminhtml/session')->addSuccess('Product Quantity Updated');
-        $this->_redirect('*/adminhtml_order/grid');
+        $this->_redirect('*/*/grid');
     }
 
     public function deleteItemAction(){
@@ -123,32 +150,32 @@ class Ccc_Order_Adminhtml_OrderController extends Mage_Adminhtml_Controller_Acti
             $model->delete();
         }catch(Exception $e){
             Mage::getSingleton('adminhtml/session')->addError($e->getMessage());
-            $this->_redirect('*/adminhtml_order/grid');
+            $this->_redirect('*/*/grid');
             return;
         }
         Mage::getSingleton('adminhtml/session')->addSuccess('Product is Deleted Successfully');
-        $this->_redirect('*/adminhtml_order/grid');
+        $this->_redirect('*/*/grid');
     }
 
     public function paymantMethodAction(){
         $data = $this->getRequest()->getPost('payment');
         if(!$data){
             Mage::getSingleton('adminhtml/session')->addError('Please Select Payment Method');
-            $this->_redirect('*/adminhtml_order/grid');
+            $this->_redirect('*/*/grid');
             return;
         }
         $cart = $this->getCart();
         $cart->setPaymentMethodCode($data);
         $cart->save();
         Mage::getSingleton('adminhtml/session')->addSuccess('Paymnet Method Saved');
-        $this->_redirect('*/adminhtml_order/grid');
+        $this->_redirect('*/*/grid');
     }
 
     public function shippingMethodAction(){
         $data = $this->getRequest()->getPost('shippingMethod');
         if(!$data){
             Mage::getSingleton('adminhtml/session')->addError('Please Select Shipping Method');
-            $this->_redirect('*/adminhtml_order/grid');
+            $this->_redirect('*/*/grid');
             return;
         }
         $data = explode('_',$data);
@@ -157,21 +184,21 @@ class Ccc_Order_Adminhtml_OrderController extends Mage_Adminhtml_Controller_Acti
         $cart->setShippingAmount($data[1]);
         $cart->save();
         Mage::getSingleton('adminhtml/session')->addSuccess('Shipping Method Saved');
-        $this->_redirect('*/adminhtml_order/grid');
+        $this->_redirect('*/*/grid');
     }
 
     public function saveCommentAction(){
         $data = $this->getRequest()->getPost('comment');
         if(!$data){
             Mage::getSingleton('adminhtml/session')->addError('Please Add Comment');
-            $this->_redirect('*/adminhtml_order/grid');
+            $this->_redirect('*/*/grid');
             return;
         }
         $cart = $this->getCart();
         $cart->setComment($data);
         $cart->save();
         Mage::getSingleton('adminhtml/session')->addSuccess('Comment is Saveed Successfully');
-        $this->_redirect('*/adminhtml_order/grid');
+        $this->_redirect('*/*/grid');
     }
 
     public function shippingAddressAction(){
@@ -189,7 +216,7 @@ class Ccc_Order_Adminhtml_OrderController extends Mage_Adminhtml_Controller_Acti
             $billingAddress = $cart->getCartBillingAddress();
             if(!$billingAddress->getId()){
                 Mage::getSingleton('adminhtml/session')->addError('Please Save Billing Address First');
-                $this->_redirect('*/adminhtml_order/grid');
+                $this->_redirect('*/*/grid');
                 return;
             }
             if($cartAddress->getId()){
@@ -241,7 +268,7 @@ class Ccc_Order_Adminhtml_OrderController extends Mage_Adminhtml_Controller_Acti
             $customerShippingAddress->save();
         }
         Mage::getSingleton('adminhtml/session')->addSuccess('Shipping Address is saved successfully');
-        $this->_redirect('*/adminhtml_order/grid');
+        $this->_redirect('*/*/grid');
     }
 
     public function billingAddressAction(){
@@ -287,7 +314,7 @@ class Ccc_Order_Adminhtml_OrderController extends Mage_Adminhtml_Controller_Acti
             $customerBillingAddress->save();
         }
         Mage::getSingleton('adminhtml/session')->addSuccess('Billing Address is saved successfully');
-        $this->_redirect('*/adminhtml_order/grid');
+        $this->_redirect('*/*/grid');
     }
 
     public function placeOrderAction(){
@@ -298,28 +325,28 @@ class Ccc_Order_Adminhtml_OrderController extends Mage_Adminhtml_Controller_Acti
 
         if($cartItems->count() <= 0){
             Mage::getSingleton('adminhtml/session')->addError('Please Add At Least One Item');
-            $this->_redirect('*/adminhtml_order/grid');
+            $this->_redirect('*/*/grid',['id'=>$cart->getCustomerId()]);
             return;
         }
         if(!$billingAddress->getId()){
             Mage::getSingleton('adminhtml/session')->addError('Please Fill The Billing Address');
-            $this->_redirect('*/adminhtml_order/grid');
+            $this->_redirect('*/*/grid',['id'=>$cart->getCustomerId()]);
             return;
         }
         if(!$shippingAddress->getId()){
             Mage::getSingleton('adminhtml/session')->addError('Please Fill The Shipping Address');
-            $this->_redirect('*/adminhtml_order/grid');
+            $this->_redirect('*/*/grid',['id'=>$cart->getCustomerId()]);
             return;
         }
 
         if(!$cart->getShippingMethodCode()){
             Mage::getSingleton('adminhtml/session')->addError('Please Select Shipping Method');
-            $this->_redirect('*/adminhtml_order/grid');
+            $this->_redirect('*/*/grid',['id'=>$cart->getCustomerId()]);
             return;
         }
         if(!$cart->getPaymentMethodCode()){
             Mage::getSingleton('adminhtml/session')->addError('Please Select Payment Method');
-            $this->_redirect('*/adminhtml_order/grid');
+            $this->_redirect('*/*/grid',['id'=>$cart->getCustomerId()]);
             return;
         }
 
@@ -363,9 +390,60 @@ class Ccc_Order_Adminhtml_OrderController extends Mage_Adminhtml_Controller_Acti
         $orderAddress->setCreatedDate(date('Y-m-d h:i:s'));
         $orderAddress->save();
         $addressModel = Mage::getModel('order/cart_address')->load($shippingAddress->getAddressId())->delete();
-
         $cart->delete();
+
+        $status = Mage::getModel('order/order_status');
+        $status->setOrderId($orderModel->getId());
+        $status->setStatus('Pending');
+        $status->setDate(date('Y-m-d h:i:s'));
+        $status->setComment('');
+        $status->save();
+
         Mage::getSingleton('adminhtml/session')->addSuccess("Your Order Is Placed");
-        $this->_redirect('*/adminhtml_order/index');
+        $this->_redirect('*/*/showOrder',['id'=>$orderModel->getId()]);
+    }
+
+    public function showOrderAction(){
+        $this->loadLayout();
+        $this->_setActiveMenu('order');
+        if(!$this->getRequest()->getParam('ajax')){
+            $this->renderLayout();
+            return;
+        }
+        $block = $this->getLayout()->getBlock('content')->toHtml();
+        $message = $this->getLayout()->getBlock('messages')->toHtml();
+        $this->makeResponse($block,$message);
+        // echo Zend_Debug::dump($this->getLayout()->getUpdate()->getHandles());
+    }
+
+    public function showProductGridAction(){
+        $this->_getSession()->setData('show',1);
+        $this->_redirect('*/*/grid',['_current'=>true]);
+        // $this->getResponse()->setBody($this->getLayout()->createBlock('order/adminhtml_order_cart_product_grid')->toHtml());
+    }
+
+    public function changeStatusAction(){
+        $data = $this->getRequest()->getPost('history');
+
+        if($data['status'] == ''){
+            Mage::getSingleton('adminhtml/session')->addError("Already Completed Order");
+            $this->_redirect('*/*/showOrder',['ajax'=>true,'_current'=>true]);
+            return;
+        }
+
+        $orderId = $this->getRequest()->getParam('id');
+        $collection = Mage::getModel('order/order_status')->getCollection()
+                    ->addFieldToFilter('order_id',['eq'=>$orderId]);
+        $item = $collection->getLastItem();
+        $model = Mage::getModel('order/order_status')->setData($data);
+        if($item && $item->getStatus() == $data['status']){
+            $model->setStatusId($collection->getLastItem()->getId());
+        }
+        $model->setOrderId($orderId);
+        $model->setDate(date('Y-m-d h:i:s'));
+        $model->save();
+        
+        Mage::getSingleton('adminhtml/session')->addSuccess("Status Saved");
+        $this->_redirect('*/*/showOrder',['ajax'=>true,'_current'=>true]);
     }
 }

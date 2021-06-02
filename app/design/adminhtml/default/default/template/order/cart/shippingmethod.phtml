@@ -6,7 +6,7 @@
             <div style="float: right;"></div>
             <h4 class="fieldset-legend head-shipping-method icon-head">Shipping Method</h4>
             <div class="form-buttons">
-                <button id="submit_order_top_button" type="button" onclick="changeAction('<?php echo $this->getShippingMethodUrl() ?>');" class="scalable save">
+            <button id="submit_order_top_button" type="button" onclick="mage.changeAction('grid','<?php echo $this->getShippingMethodUrl(); ?>').setForm('grid');" class="scalable save">
                     <span><span><span>Update</span></span></span>
                 </button>
             </div>

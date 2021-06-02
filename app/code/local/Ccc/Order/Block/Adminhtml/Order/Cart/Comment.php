@@ -10,6 +10,6 @@ class Ccc_Order_Block_Adminhtml_Order_Cart_Comment extends Ccc_Order_Block_Admin
     }
 
     public function getCommentSaveUrl(){
-        return $this->getUrl('*/adminhtml_order/saveComment',array('_current'=>true));
+        return $this->getUrl('*/*/saveComment',array('_current'=>true));
     }
 }

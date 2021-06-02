@@ -1,51 +1,48 @@
-<form id="grid" action="<?php echo $this->getUrl('*/*/grid'); ?>" method="POST">
-    <div class="content-header">
-        <div id="order-header">
-            <h3 class="icon-head head-sales-order">Create New Order</h3>
-        </div>
-        <div class="form-buttons">
-            <div class="form-buttons">
-                <button id="submit_order_top_button" type="button" onclick="return validate('<?php echo $this->getSaveUrl() ?>');" class="scalable save">
-                    <span><span><span>Submit Order</span></span></span>
-                </button>
+<div id="messageHtml"><?php echo $this->getMessageHtml(); ?></div>
+<div id="contentHtml">
+    <form id="grid" action="<?php echo $this->getUrl('*/*/grid'); ?>" method="POST">
+        <div class="content-header">
+            <div id="order-header">
+                <h3 class="icon-head head-sales-order">Create New Order</h3>
             </div>
             <div class="form-buttons">
-                <button id="submit_order_top_button" type="button" onclick="changeAction('<?php echo $this->getBackUrl() ?>');" class="scalable back">
-                    <span><span><span>Back</span></span></span>
-                </button>
+                <div class="form-buttons">
+                    <button id="submit_order_top_button" type="button" onclick="return validate('<?php echo $this->getSaveUrl() ?>');" class="scalable save">
+                        <span><span><span>Submit Order</span></span></span>
+                    </button>
+                </div>
+                <div class="form-buttons">
+                    <button id="submit_order_top_button" type="button" onclick="changeAction('<?php echo $this->getBackUrl() ?>');" class="scalable back">
+                        <span><span><span>Back</span></span></span>
+                    </button>
+                </div>
             </div>
         </div>
-    </div>
 
-    <?php echo $this->getBlockHtml('formkey'); ?>
-    <div id="products"><?php echo $this->getChildHtml('product'); ?></div>
-    <?php echo $this->getChildHtml('item'); ?>
-    <?php echo $this->getChildHtml('account'); ?>
-    <?php echo $this->getChildHtml('billing_address'); ?>
-    <?php echo $this->getChildHtml('shipping_address'); ?>
-    <?php echo $this->getChildHtml('payment_method'); ?>
-    <?php echo $this->getChildHtml('shipping_method'); ?>
-    <?php echo $this->getChildHtml('comment'); ?>
-    <?php echo $this->getChildHtml('total'); ?>
-</form>
+        <?php echo $this->getBlockHtml('formkey'); ?>
+        <div id="products"><?php echo $this->getChildHtml('product'); ?></div>
+        <?php echo $this->getChildHtml('item'); ?>
+        <?php echo $this->getChildHtml('account'); ?>
+        <?php echo $this->getChildHtml('billing_address'); ?>
+        <?php echo $this->getChildHtml('shipping_address'); ?>
+        <?php echo $this->getChildHtml('payment_method'); ?>
+        <?php echo $this->getChildHtml('shipping_method'); ?>
+        <?php echo $this->getChildHtml('comment'); ?>
+        <?php echo $this->getChildHtml('total'); ?>
+    </form>
+</div>
 
-
+<?php $show = Mage::getSingleton('adminhtml/session')->getData('show'); ?>
 <script type="text/javascript">
-    // if(!localStorage.getItem('active')){
-    //     localStorage.setItem("active", 0);
-    // }
-    // if(localStorage.getItem('active') == 0){
+    if(<?php echo $show; ?>){
+        showProduct();
+    }else{
         document.getElementById('products').style.display = "none";
-    // }
+    }
+
     function showProduct() {
         document.getElementById('products').style.display = "block";
-        localStorage.setItem('active',1);
     }
-    // function hideProduct(url) {
-    //     console.log(url);
-    //     localStorage.setItem('active',0);
-    //     // changeAction(url);
-    // }
 
     function changeAction(value) {
         form = document.getElementById('grid');
@@ -53,28 +50,32 @@
         form.submit();
     }
 
-    function validate(url,method = ''){
+    function validate(url, method = '') {
         tbodys = document.getElementById('shipping').children[0];
         tbodyb = document.getElementById('billing').children[0];
         checkbox = document.getElementById('sameAsBillingcheck').checked;
-        if(!checkbox){
-            if(method == 's' || method==''){
-                for(i=0;i<7;i++){
-                    if(tbodys.children[i].children[1].children[0].value == ''){
+        if (!checkbox) {
+            if (method == 's' || method == '') {
+                for (i = 0; i < 7; i++) {
+                    if (tbodys.children[i].children[1].children[0].value == '') {
                         alert("Please Fill All The Field of Shipping Address");
                         return false;
                     }
                 }
             }
         }
-        if(method == 'b' || method==''){
-            for(i=0;i<7;i++){
-                if(tbodyb.children[i].children[1].children[0].value == ''){
+        if (method == 'b' || method == '') {
+            for (i = 0; i < 7; i++) {
+                if (tbodyb.children[i].children[1].children[0].value == '') {
                     alert("Please Fill All The Field Of Billing Address");
                     return false;
                 }
             }
         }
-        changeAction(url);
+        if (method == '') {
+            changeAction(url);
+            return;
+        }
+        mage.changeAction('grid', url).setForm('grid');
     }
 </script>

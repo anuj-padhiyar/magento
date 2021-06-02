@@ -3,6 +3,9 @@
 class Ccc_Order_Block_Adminhtml_Order_Cart_Product_Grid extends Mage_Adminhtml_Block_Widget_Grid{
     public function __construct(){
         parent::__construct();
+        // $this->setId('product_grid');
+        // $this->setSaveParametersInSession(true);
+        // $this->setUseAjax(true);
     }
 
     public function _prepareCollection(){
@@ -36,14 +39,16 @@ class Ccc_Order_Block_Adminhtml_Order_Cart_Product_Grid extends Mage_Adminhtml_B
     {
         $this->setMassactionIdField('entity_id');
         $this->getMassactionBlock()->setFormFieldName('product');
-
         $this->getMassactionBlock()->addItem('add_to_cart', array(
              'label'=> Mage::helper('order')->__('Add To Cart'),
-             'url'  => $this->getUrl('*/adminhtml_order/addProduct'),
-             'confirm' => Mage::helper('order')->__('Are you sure?')
+             'url'  => $this->getUrl('*/*/addProduct'),
+             'confirm' => Mage::helper('order')->__('Are you sure?'),
+             'selected' => true
         ));
         return $this;
     }
-}
 
-?>
+    public function getGridUrl(){
+        return $this->getUrl('*/*/showProductGrid',['_current'=>true]);
+    }
+}

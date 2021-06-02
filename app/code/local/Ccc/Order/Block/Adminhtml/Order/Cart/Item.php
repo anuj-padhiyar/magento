@@ -10,10 +10,10 @@ class Ccc_Order_Block_Adminhtml_Order_Cart_Item extends Ccc_Order_Block_Adminhtm
     }
 
     public function getUpdateUrl(){
-        return $this->getUrl('*/adminhtml_order/changeQuantity');
+        return $this->getUrl('*/*/changeQuantity');
     }
 
     public function getDeleteItemUrl($id){
-        return $this->getUrl('*/adminhtml_order/deleteItem',array('itemId'=>$id));
+        return $this->getUrl('*/*/deleteItem',array('itemId'=>$id));
     }
 }

@@ -13,7 +13,7 @@ class Ccc_Order_Block_Adminhtml_Order extends Mage_Adminhtml_Block_Widget_Grid_C
     }
 
     public function getCreateUrl(){
-        return $this->getUrl('*/adminhtml_order/showCustomer');
+        return $this->getUrl('*/order/showCustomer');
     }
 
 }

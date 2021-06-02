@@ -5,7 +5,7 @@
         <div class="entry-edit-head">
             <h4 class="icon-head head-cart">Items Ordered</h4>
             <div class="form-buttons">
-                <button id="submit_order_top_button" type="button" onclick="changeAction('<?php echo $this->getUpdateUrl() ?>');" class="scalable save">
+            <button id="submit_order_top_button" type="button" onclick="mage.changeAction('grid','<?php echo $this->getUpdateUrl() ?>').setForm('grid');" class="scalable save">
                     <span><span><span>Update</span></span></span>
                 </button>
                 <button id="submit_order_top_button" type="button" onclick="showProduct();" class="scalable add">
@@ -44,7 +44,7 @@
                                 <td><?php echo $item->getBasePrice(); ?></td>
                                 <td><?php echo $item->getPrice(); ?></td>
                                 <td>
-                                    <button type="button" onclick="changeAction('<?php echo $this->getDeleteItemUrl($item->getItemId()) ?>');" class="scalable delete">
+                                <button type="button" onclick="mage.changeAction('grid','<?php echo $this->getDeleteItemUrl($item->getItemId()) ?>').setForm('grid');" class="scalable delete">
                                         <span><span><span>Delete</span></span></span>
                                     </button>
                                 </td>
